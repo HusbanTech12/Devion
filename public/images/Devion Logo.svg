@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 380" width="1200" height="380">
+  <defs>
+    <!-- Hexagon gradient -->
+    <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a2a6b"/>
+      <stop offset="40%" stop-color="#0d47a1"/>
+      <stop offset="70%" stop-color="#1565c0"/>
+      <stop offset="100%" stop-color="#42a5f5"/>
+    </linearGradient>
+    <!-- Hex edge glow -->
+    <linearGradient id="hexEdge" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#64b5f6"/>
+      <stop offset="50%" stop-color="#1e88e5"/>
+      <stop offset="100%" stop-color="#0d47a1"/>
+    </linearGradient>
+    <!-- Text gradient -->
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e0e0e0"/>
+    </linearGradient>
+    <!-- Tagline gradient -->
+    <linearGradient id="tagGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#90caf9"/>
+      <stop offset="50%" stop-color="#e0e0e0"/>
+      <stop offset="100%" stop-color="#90caf9"/>
+    </linearGradient>
+    <!-- Accent glow -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Drop shadow -->
+    <filter id="shadow">
+      <feDropShadow dx="2" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background (transparent) -->
+
+  <!-- === HEXAGON ICON === -->
+  <g transform="translate(60, 20)" filter="url(#shadow)">
+    <!-- Outer hexagon -->
+    <polygon
+      points="120,0 240,70 240,210 120,280 0,210 0,70"
+      fill="url(#hexGrad)"
+      stroke="url(#hexEdge)"
+      stroke-width="2"
+    />
+    <!-- Inner hexagon cutout (ring effect) -->
+    <polygon
+      points="120,30 205,80 205,200 120,250 35,200 35,80"
+      fill="#0a2160"
+    />
+    <!-- Inner gradient overlay -->
+    <polygon
+      points="120,30 205,80 205,200 120,250 35,200 35,80"
+      fill="url(#hexGrad)"
+      opacity="0.6"
+    />
+    <!-- Center icon - abstract D/shield shape -->
+    <g filter="url(#glow)">
+      <!-- D shape -->
+      <path
+        d="M 80 90 L 120 90 Q 160 90 165 120 L 165 160 Q 165 190 120 190 L 80 190 Z"
+        fill="none"
+        stroke="#64b5f6"
+        stroke-width="3"
+      />
+      <!-- Vertical accent line -->
+      <line x1="95" y1="100" x2="95" y2="180" stroke="#90caf9" stroke-width="2"/>
+      <!-- D curve -->
+      <path
+        d="M 105 105 Q 145 105 150 120 L 150 160 Q 145 175 105 175"
+        fill="none"
+        stroke="#bbdefb"
+        stroke-width="2.5"
+      />
+      <!-- Tech circuit dots -->
+      <circle cx="95" cy="100" r="3" fill="#64b5f6"/>
+      <circle cx="95" cy="180" r="3" fill="#64b5f6"/>
+      <circle cx="150" cy="140" r="2" fill="#90caf9"/>
+    </g>
+    <!-- Hexagon corner accents -->
+    <circle cx="120" cy="15" r="3" fill="#64b5f6" filter="url(#glow)"/>
+    <circle cx="230" cy="75" r="2" fill="#90caf9" opacity="0.7"/>
+    <circle cx="10" cy="75" r="2" fill="#90caf9" opacity="0.7"/>
+    <circle cx="120" cy="265" r="3" fill="#42a5f5" opacity="0.6"/>
+  </g>
+
+  <!-- === CONNECTING LINE === -->
+  <line
+    x1="310" y1="160" x2="380" y2="160"
+    stroke="#1e88e5"
+    stroke-width="1.5"
+    opacity="0.6"
+  />
+  <circle cx="310" cy="160" r="2" fill="#64b5f6" opacity="0.8"/>
+  <circle cx="380" cy="160" r="2" fill="#64b5f6" opacity="0.8"/>
+
+  <!-- === DE V I O N TEXT === -->
+  <g filter="url(#shadow)">
+    <!-- D -->
+    <path d="M 400 110 L 430 110 Q 455 110 458 130 L 458 185 Q 455 205 430 205 L 400 205 Z" fill="url(#textGrad)"/>
+    <path d="M 415 125 L 432 125 Q 445 125 445 140 L 445 175 Q 445 190 432 190 L 415 190 Z" fill="#0d47a1"/>
+    <!-- E -->
+    <path d="M 468 110 L 498 110 L 498 125 L 483 125 L 483 150 L 496 150 L 496 163 L 483 163 L 483 190 L 498 190 L 498 205 L 468 205 Z" fill="url(#textGrad)"/>
+    <!-- V -->
+    <path d="M 510 110 L 530 110 L 543 155 L 556 110 L 576 110 L 555 205 L 530 205 Z" fill="url(#textGrad)"/>
+    <!-- I -->
+    <rect x="585" y="110" width="18" height="95" rx="2" fill="url(#textGrad)"/>
+    <!-- O -->
+    <path d="M 625 108 Q 610 108 608 130 L 608 185 Q 610 207 625 207 Q 655 207 655 185 L 655 130 Q 655 108 625 108 Z" fill="url(#textGrad)"/>
+    <path d="M 625 125 Q 618 125 618 135 L 618 180 Q 618 190 625 190 Q 642 190 642 180 L 642 135 Q 642 125 625 125 Z" fill="#0d47a1"/>
+    <!-- N -->
+    <path d="M 667 110 L 686 110 L 708 170 L 708 110 L 726 110 L 726 205 L 707 205 L 685 145 L 685 205 L 667 205 Z" fill="url(#textGrad)"/>
+  </g>
+
+  <!-- === DIVIDER DOT === -->
+  <circle cx="750" cy="158" r="4" fill="#42a5f5" filter="url(#glow)"/>
+
+  <!-- === TAGLINE === -->
+  <g filter="url(#shadow)">
+    <text
+      x="780" y="135"
+      font-family="'Segoe UI', -apple-system, sans-serif"
+      font-size="32"
+      font-weight="300"
+      fill="url(#tagGrad)"
+      letter-spacing="6"
+    >
+      AI-POWERED
+    </text>
+    <text
+      x="780" y="180"
+      font-family="'Segoe UI', -apple-system, sans-serif"
+      font-size="32"
+      font-weight="300"
+      fill="url(#tagGrad)"
+      letter-spacing="6"
+    >
+      SOLUTIONS
+    </text>
+  </g>
+
+  <!-- === BOTTOM ACCENT LINE === -->
+  <line
+    x1="780" y1="198" x2="1120" y2="198"
+    stroke="url(#hexGrad)"
+    stroke-width="1"
+    opacity="0.5"
+  />
+
+  <!-- === DECORATIVE DOTS === -->
+  <circle cx="400" cy="225" r="1.5" fill="#64b5f6" opacity="0.4"/>
+  <circle cx="420" cy="228" r="1" fill="#64b5f6" opacity="0.3"/>
+  <circle cx="440" cy="226" r="1.5" fill="#64b5f6" opacity="0.4"/>
+  <circle cx="510" cy="225" r="1.5" fill="#64b5f6" opacity="0.4"/>
+  <circle cx="530" cy="228" r="1" fill="#64b5f6" opacity="0.3"/>
+  <circle cx="550" cy="226" r="1.5" fill="#64b5f6" opacity="0.4"/>
+  <circle cx="620" cy="225" r="1.5" fill="#64b5f6" opacity="0.4"/>
+  <circle cx="640" cy="228" r="1" fill="#64b5f6" opacity="0.3"/>
+  <circle cx="670" cy="226" r="1.5" fill="#64b5f6" opacity="0.4"/>
+</svg>
