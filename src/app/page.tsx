@@ -107,11 +107,10 @@ function VideoBackground() {
         loop
         muted
         playsInline
-        className="h-full w-full object-cover opacity-60"
+        className="h-full w-full object-cover"
       >
         <source src="/videos/14519632_3840_2160_25fps.mp4" type="video/mp4" />
       </video>
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50" />
     </div>
   )
 }
@@ -241,18 +240,6 @@ export default function Home() {
         {/* ─── HERO ─── */}
         <section className="relative min-h-[90vh] flex items-center overflow-hidden">
           <VideoBackground />
-          <FloatingOrb className="top-1/4 -left-48 bg-primary/10" size={600} />
-          <FloatingOrb className="bottom-1/4 -right-48 bg-primary/8" delay={2} size={500} />
-          <FloatingOrb className="top-1/3 right-1/4 bg-primary/5" delay={4} size={200} />
-
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage:
-                "linear-gradient(var(--primary) 1px, transparent 1px), linear-gradient(90deg, var(--primary) 1px, transparent 1px)",
-              backgroundSize: "60px 60px",
-            }}
-          />
 
           <div className="container relative z-10 py-24 md:py-32">
             <div className="mx-auto max-w-5xl text-center">
@@ -342,7 +329,6 @@ export default function Home() {
                   </Button>
                 </motion.div>
               </motion.div>
-
 
             </div>
           </div>
