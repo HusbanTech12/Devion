@@ -1,12 +1,11 @@
 import Link from "next/link"
-import { Sparkles, Globe, AtSign, UsersRound, Rss, ChevronRight } from "lucide-react"
+import { Sparkles, Globe, AtSign, UsersRound, ChevronRight } from "lucide-react"
 
 const footerLinks = {
   Company: [
     { href: "/about", label: "About" },
     { href: "/services", label: "Services" },
     { href: "/pricing", label: "Pricing" },
-    { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
   ],
   Resources: [
@@ -26,7 +25,6 @@ const socials = [
   { href: "#", label: "LinkedIn", icon: UsersRound },
   { href: "#", label: "Twitter", icon: AtSign },
   { href: "#", label: "GitHub", icon: Globe },
-  { href: "#", label: "Blog", icon: Rss },
 ]
 
 export function Footer() {

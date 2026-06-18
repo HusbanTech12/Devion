@@ -56,11 +56,11 @@ export default function ContactPage() {
             >
               <Badge className="mb-4 px-3 py-1">Contact</Badge>
               <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-                Let&apos;s build something extraordinary
+                Get in touch
               </h1>
               <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-                Have a project in mind? We&apos;d love to hear about it. Send us a
-                message and we&apos;ll get back to you within 24 hours.
+                We&apos;d love to hear from you. Send us a message and our team
+                will get back to you within 24 hours.
               </p>
             </motion.div>
           </div>
