@@ -46,29 +46,19 @@ export default function ContactPage() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex-1">
-        {/* Hero */}
-        <section className="relative overflow-hidden border-b bg-gradient-to-b from-muted/50 to-background py-24 md:py-32">
+        {/* Contact Form + Info */}
+        <section className="py-20 md:py-28">
           <div className="container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mx-auto max-w-3xl text-center"
+              className="mx-auto max-w-3xl text-center mb-12"
             >
               <Badge className="mb-4 px-3 py-1">Contact</Badge>
               <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
                 Get in touch
               </h1>
-              <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-                We&apos;d love to hear from you. Send us a message and our team
-                will get back to you within 24 hours.
-              </p>
             </motion.div>
-          </div>
-        </section>
-
-        {/* Contact Form + Info */}
-        <section className="py-20 md:py-28">
-          <div className="container">
             <div className="grid gap-12 lg:grid-cols-5 mx-auto max-w-5xl">
               {/* Info */}
               <motion.div
