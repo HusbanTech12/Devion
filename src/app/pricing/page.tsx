@@ -163,7 +163,7 @@ export default function PricingPage() {
         </section>
 
         {/* CTA */}
-        <section className="border-t bg-muted/30 py-16 md:py-20">
+        <section className="border-t bg-muted/30 py-20 md:py-28">
           <div className="container max-w-3xl text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}

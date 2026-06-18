@@ -338,7 +338,7 @@ export default function Home() {
         </section>
 
         {/* ─── FEATURES ─── */}
-        <Section className="py-24 md:py-32" id="features">
+        <Section className="py-20 md:py-28" id="features">
           <div className="container">
             <motion.div {...fadeUp(0)} className="mx-auto max-w-3xl text-center">
               <Badge variant="secondary" className="mb-4 px-3 py-1 tracking-wide">What We Build</Badge>
@@ -352,7 +352,7 @@ export default function Home() {
                 We design and build everything you need to grow — from fullstack applications to AI-powered systems.
               </p>
             </motion.div>
-            <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {features.map((feature, i) => (
                 <FeatureCard key={feature.title} feature={feature} i={i} />
               ))}
@@ -361,7 +361,7 @@ export default function Home() {
         </Section>
 
         {/* ─── HOW IT WORKS ─── */}
-        <Section className="bg-muted/30 py-24 md:py-32">
+        <Section className="bg-muted/30 py-20 md:py-28">
           <div className="container">
             <motion.div {...fadeUp(0)} className="mx-auto max-w-3xl text-center">
               <Badge variant="secondary" className="mb-4 px-3 py-1 tracking-wide">Process</Badge>
@@ -378,7 +378,7 @@ export default function Home() {
               </p>
             </motion.div>
 
-            <div className="mt-16 grid gap-8 md:grid-cols-4">
+            <div className="mt-12 grid gap-8 md:grid-cols-4">
               {steps.map((step, i) => (
                 <motion.div
                   key={step.step}
@@ -413,7 +413,7 @@ export default function Home() {
         </Section>
 
         {/* ─── STATS ─── */}
-        <Section className="bg-muted/40 py-20 md:py-24">
+        <Section className="bg-muted/40 py-20 md:py-28">
           <div className="container">
             <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
               {stats.map((stat) => (
@@ -424,7 +424,7 @@ export default function Home() {
         </Section>
 
         {/* ─── TESTIMONIALS ─── */}
-        <Section className="py-24 md:py-32">
+        <Section className="py-20 md:py-28">
           <div className="container">
             <motion.div {...fadeUp(0)} className="mx-auto max-w-3xl text-center">
               <Badge variant="secondary" className="mb-4 px-3 py-1 tracking-wide">Testimonials</Badge>
@@ -439,7 +439,7 @@ export default function Home() {
               </p>
             </motion.div>
 
-            <div className="mt-16 grid gap-8 md:grid-cols-3">
+            <div className="mt-12 grid gap-8 md:grid-cols-3">
               {testimonials.map((t, i) => (
                 <motion.div
                   key={t.author}
@@ -478,7 +478,7 @@ export default function Home() {
         </Section>
 
         {/* ─── CTA ─── */}
-        <Section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/5 py-24 md:py-32">
+        <Section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/5 py-20 md:py-28">
           <motion.div
             className="absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/8 blur-3xl"
             animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
