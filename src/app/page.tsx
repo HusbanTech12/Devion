@@ -90,6 +90,32 @@ function FloatingOrb({ className, delay = 0, size = 300 }: { className: string; 
   )
 }
 
+function VideoBackground() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.7
+    }
+  }, [])
+
+  return (
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <video
+        ref={videoRef}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="h-full w-full object-cover opacity-60"
+      >
+        <source src="/videos/14519632_3840_2160_25fps.mp4" type="video/mp4" />
+      </video>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50" />
+    </div>
+  )
+}
+
 function FeatureCard({ feature, i }: { feature: { icon: React.ElementType; title: string; desc: string }; i: number }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
@@ -214,16 +240,7 @@ export default function Home() {
       <main className="flex-1">
         {/* ─── HERO ─── */}
         <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5"
-            animate={{ opacity: [1, 0.8, 1] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-tr from-primary/3 via-transparent to-primary/5"
-            animate={{ opacity: [0.3, 0.6, 0.3], rotate: [0, 5, 0] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          />
+          <VideoBackground />
           <FloatingOrb className="top-1/4 -left-48 bg-primary/10" size={600} />
           <FloatingOrb className="bottom-1/4 -right-48 bg-primary/8" delay={2} size={500} />
           <FloatingOrb className="top-1/3 right-1/4 bg-primary/5" delay={4} size={200} />
@@ -261,57 +278,26 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="text-balance text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
               >
-                AI-Powered{" "}
+                <span className="text-white">AI-Powered</span>{" "}
                 <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
                   Solutions
                 </span>
                 <br />
-                for the Future
+                for the{" "}
+                <span className="bg-gradient-to-r from-primary/60 via-primary to-primary/80 bg-clip-text text-transparent">
+                  Future
+                </span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl"
+                className="mx-auto mt-6 max-w-2xl text-lg text-white/80 md:text-xl"
               >
                 We engineer intelligent systems that automate, predict, and transform.
                 Deploy production-ready AI at scale — without the complexity.
               </motion.p>
-
-              {/* ─── AVAILABLE SERVICES ─── */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.25 }}
-                className="mt-8 flex flex-wrap justify-center gap-2"
-              >
-                {[
-                  { label: "Intelligent Automation", icon: Bot },
-                  { label: "Custom ML Models", icon: Brain },
-                  { label: "Generative AI", icon: Sparkles },
-                  { label: "Predictive Analytics", icon: TrendingUp },
-                  { label: "NLP & Chatbots", icon: MessageSquare },
-                  { label: "Data Engineering", icon: Globe },
-                ].map((service, i) => (
-                  <motion.div
-                    key={service.label}
-                    initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ delay: 0.25 + i * 0.06, duration: 0.3, ease: "backOut" }}
-                    whileHover={{ scale: 1.06, y: -3 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Link
-                      href="/services"
-                      className="inline-flex items-center gap-1.5 rounded-full border bg-background/50 px-3 py-1.5 text-xs shadow-sm backdrop-blur-sm transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary"
-                    >
-                      <service.icon className="h-3 w-3" />
-                      {service.label}
-                    </Link>
-                  </motion.div>
-                ))}
-              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -357,35 +343,13 @@ export default function Home() {
                 </motion.div>
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="mt-16 flex flex-wrap items-center justify-center gap-8 text-xs text-muted-foreground"
-              >
-                {[
-                  { icon: Star, text: "4.9/5 from 300+ reviews", cls: "fill-amber-400 text-amber-400" },
-                  { icon: CheckCircle, text: "SOC 2 Type II certified", cls: "text-emerald-500" },
-                  { icon: Users, text: "15K+ developers", cls: "text-primary" },
-                ].map((item, i) => (
-                  <motion.span
-                    key={item.text}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 + i * 0.15 }}
-                    className="flex items-center gap-2"
-                  >
-                    <item.icon className={`h-4 w-4 ${item.cls}`} />
-                    {item.text}
-                  </motion.span>
-                ))}
-              </motion.div>
+
             </div>
           </div>
         </section>
 
         {/* ─── STATS ─── */}
-        <Section className="border-y bg-muted/40 py-16 md:py-20">
+        <Section className="bg-muted/40 py-20 md:py-24">
           <div className="container">
             <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
               {stats.map((stat) => (
@@ -399,9 +363,12 @@ export default function Home() {
         <Section className="py-24 md:py-32" id="features">
           <div className="container">
             <motion.div {...fadeUp(0)} className="mx-auto max-w-3xl text-center">
-              <Badge variant="secondary" className="mb-4 px-3 py-1">Platform</Badge>
+              <Badge variant="secondary" className="mb-4 px-3 py-1 tracking-wide">Platform</Badge>
               <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-                Everything you need to ship AI at scale
+                Everything you need to{" "}
+                <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+                  ship AI at scale
+                </span>
               </h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 A complete platform with tools, infrastructure, and expertise — so you can focus on results, not setup.
@@ -416,12 +383,17 @@ export default function Home() {
         </Section>
 
         {/* ─── HOW IT WORKS ─── */}
-        <Section className="border-y bg-muted/30 py-24 md:py-32">
+        <Section className="bg-muted/30 py-24 md:py-32">
           <div className="container">
             <motion.div {...fadeUp(0)} className="mx-auto max-w-3xl text-center">
-              <Badge variant="secondary" className="mb-4 px-3 py-1">Process</Badge>
+              <Badge variant="secondary" className="mb-4 px-3 py-1 tracking-wide">Process</Badge>
               <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-                From idea to production in weeks, not months
+                From idea to{" "}
+                <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+                  production
+                </span>{" "}
+                <br className="hidden sm:inline" />
+                in weeks, not months
               </h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 Our proven four-phase process de-risks AI adoption and delivers measurable value fast.
@@ -466,9 +438,12 @@ export default function Home() {
         <Section className="py-24 md:py-32">
           <div className="container">
             <motion.div {...fadeUp(0)} className="mx-auto max-w-3xl text-center">
-              <Badge variant="secondary" className="mb-4 px-3 py-1">Testimonials</Badge>
+              <Badge variant="secondary" className="mb-4 px-3 py-1 tracking-wide">Testimonials</Badge>
               <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-                Trusted by industry leaders
+                Trusted by{" "}
+                <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+                  industry leaders
+                </span>
               </h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 See what our customers say about working with Devion.
@@ -522,7 +497,7 @@ export default function Home() {
         </Section>
 
         {/* ─── CTA ─── */}
-        <Section className="relative overflow-hidden border-t bg-gradient-to-br from-primary/5 via-background to-primary/5 py-24 md:py-32">
+        <Section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/5 py-24 md:py-32">
           <motion.div
             className="absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/8 blur-3xl"
             animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
@@ -530,9 +505,13 @@ export default function Home() {
           />
           <div className="container relative">
             <motion.div {...fadeUp(0)} className="mx-auto max-w-3xl text-center">
-              <Badge variant="secondary" className="mb-4 px-3 py-1">Get Started</Badge>
+              <Badge variant="secondary" className="mb-4 px-3 py-1 tracking-wide">Get Started</Badge>
               <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-                Ready to transform your business with AI?
+                Ready to{" "}
+                <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+                  transform
+                </span>{" "}
+                your business with AI?
               </h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 Join 150+ enterprises already using Devion to build smarter, ship faster, and scale further.
