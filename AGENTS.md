@@ -299,3 +299,28 @@ npm run dev
 - `npx eslint .` — lint
 - `npx tsc --noEmit` — type check
 - `npm run build` — production build (must pass before deploy)
+
+
+## Content: Services & Pricing
+
+### Services (6 categories)
+
+| Service | What We Build |
+|---|---|
+| **🌐 Fullstack Web Development** | Business websites, SaaS platforms, dashboards, admin systems, scalable architectures, responsive UI systems |
+| **📱 App Development** | iOS & Android apps, cross-platform development, backend integration, offline & real-time sync |
+| **🔍 SEO Services** | On-page SEO, technical SEO audits, keyword research, content optimization, ranking analytics |
+| **🤖 AI Systems Integration** | AI assistants, RAG chatbot systems, intelligent web experiences, AI support systems |
+| **📊 Dashboard Systems** | Admin dashboards, analytics systems, lead management, reporting interfaces |
+| **🎬 Video Editing** | Marketing videos, motion graphics, post-production, brand storytelling, social media content |
+
+### Pricing (6 tiers)
+
+| Package | Price | Includes | Best For |
+|---|---|---|---|
+| **🟢 Starter** | $499 – $999 | Responsive business website, premium UI/UX, contact forms, deployment, WhatsApp integration | Small businesses |
+| **📱 App Development** | $1,000 – $3,000 | iOS & Android apps, cross-platform dev, backend integration, offline sync, app store deployment | Mobile-first businesses |
+| **🔍 SEO Services** | $300 – $800 | On-page SEO, technical SEO audits, keyword research, content optimization, ranking analytics | Businesses improving visibility |
+| **🟡 Growth** | $1,500 – $3,000 | Fullstack web app, admin dashboard, AI integration, analytics dashboard | Growing businesses |
+| **🔴 Premium** | $3,000 – $8,000+ | Advanced AI systems, custom dashboards, scalable architecture, premium UI systems, analytics platform, premium support | Serious businesses & startups |
+| **🎬 Video Editing** | $200 – $500 | Marketing videos, motion graphics, post-production, brand storytelling, social media content | Content creators & brands |

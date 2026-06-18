@@ -1,63 +1,55 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Check, ArrowRight } from "lucide-react"
+import { Check, ArrowRight, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { Navbar } from "@/src/components/layout/navbar"
 import { Footer } from "@/src/components/layout/footer"
 import { Badge } from "@/src/components/ui/badge"
 import { Button } from "@/src/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "@/src/components/ui/card"
+import { Card, CardContent, CardFooter } from "@/src/components/ui/card"
 
 const plans = [
   {
     name: "Starter",
     price: "$499",
-    desc: "Perfect for small teams looking to get started with AI.",
+    desc: "Everything you need to establish a polished online presence.",
     features: [
-      "1 AI model deployment",
-      "5,000 API calls/month",
-      "Email support",
-      "Basic analytics",
-      "Community access",
+      "Responsive Business Website",
+      "Contact Forms + WhatsApp Integration",
+      "Basic SEO Setup",
+      "Hosting & Deployment",
+      "Premium UI/UX Design",
     ],
   },
   {
     name: "Growth",
     price: "$1,499",
-    desc: "For growing teams that need more power and flexibility.",
+    desc: "A fullstack solution with AI, analytics, and room to scale.",
     popular: true,
     features: [
-      "5 AI model deployments",
-      "50,000 API calls/month",
-      "Priority email & chat support",
-      "Advanced analytics",
-      "Custom integrations",
-      "Dedicated account manager",
+      "Fullstack Web Application",
+      "Admin Dashboard + Analytics",
+      "AI Systems Integration",
+      "Advanced SEO Services",
+      "Scalable Architecture",
+      "Ongoing Support",
     ],
   },
   {
-    name: "Enterprise",
-    price: "Custom",
-    desc: "For organizations that need a fully customized solution.",
+    name: "Premium",
+    price: "$2,999",
+    desc: "The complete package — AI, apps, video, and priority support.",
     features: [
-      "Unlimited deployments",
-      "Unlimited API calls",
-      "24/7 phone & email support",
-      "Real-time dashboards",
-      "Custom model training",
-      "Dedicated engineering team",
-      "SLA guarantee",
-      "On-premise option",
+      "Everything in Growth Plan",
+      "Advanced AI Assistants & Chatbots",
+      "Custom Dashboards & Reporting",
+      "Mobile App Development",
+      "Professional Video Editing & Motion Graphics",
+      "Priority Support & Maintenance",
     ],
   },
 ]
-
-const fadeIn = {
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-}
 
 export default function PricingPage() {
   return (
@@ -74,10 +66,14 @@ export default function PricingPage() {
             >
               <Badge className="mb-4 px-3 py-1">Pricing</Badge>
               <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-                Simple, transparent pricing
+                Investment that{" "}
+                <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+                  pays for itself
+                </span>
               </h1>
               <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-                No hidden fees. No surprises. Scale as you grow.
+                Fixed-price packages with no hidden fees. Pick the tier that fits
+                your goals and budget.
               </p>
             </motion.div>
           </div>
@@ -86,107 +82,114 @@ export default function PricingPage() {
         {/* Plans */}
         <section className="py-20 md:py-28">
           <div className="container">
-            <div className="grid gap-8 lg:grid-cols-3 mx-auto max-w-5xl">
+            <div className="grid gap-8 lg:grid-cols-3 mx-auto max-w-5xl items-start">
               {plans.map((plan, i) => (
                 <motion.div
                   key={plan.name}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="relative"
+                  transition={{ delay: i * 0.12, duration: 0.5 }}
+                  className="relative flex"
                 >
                   {plan.popular && (
-                    <div className="absolute -top-3 left-0 right-0 flex justify-center">
-                      <Badge className="px-4 py-1">Most Popular</Badge>
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
+                      <div className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-white shadow-lg shadow-primary/30">
+                        <Sparkles className="h-3.5 w-3.5" />
+                        Most Popular
+                      </div>
                     </div>
                   )}
+
                   <Card
-                    className={`h-full ${plan.popular ? "border-primary shadow-lg md:scale-105" : ""}`}
+                    className={`relative flex w-full flex-col overflow-hidden transition-all duration-300 ${
+                      plan.popular
+                        ? "border-primary/60 shadow-2xl shadow-primary/10 ring-1 ring-primary/20 lg:scale-105"
+                        : "border-border hover:shadow-xl hover:border-primary/30"
+                    }`}
                   >
-                    <CardHeader className="p-6">
-                      <h3 className="text-lg font-semibold">{plan.name}</h3>
-                      <div className="mt-2">
-                        <span className="text-4xl font-bold">{plan.price}</span>
-                        {plan.price !== "Custom" && (
-                          <span className="text-muted-foreground">/month</span>
-                        )}
+                    {plan.popular && (
+                      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-primary/60 to-primary/80" />
+                    )}
+
+                    <CardContent className="flex flex-col p-0">
+                      <div className="p-8 pb-0">
+                        <h3 className="text-xl font-bold tracking-tight">
+                          {plan.name}
+                        </h3>
+                        <div className="mt-4 flex items-baseline gap-1">
+                          <span className="text-5xl font-bold tracking-tight">{plan.price}</span>
+                        </div>
+                        <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                          {plan.desc}
+                        </p>
                       </div>
-                      <p className="mt-2 text-sm text-muted-foreground">
-                        {plan.desc}
-                      </p>
-                    </CardHeader>
-                    <CardContent className="p-6 pt-0">
-                      <ul className="space-y-3">
-                        {plan.features.map((f) => (
-                          <li key={f} className="flex items-start gap-2 text-sm">
-                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                            {f}
-                          </li>
-                        ))}
-                      </ul>
+
+                      <div className="mt-8 px-8">
+                        <div className="h-px bg-gradient-to-r from-border via-border to-transparent" />
+                      </div>
+
+                      <div className="p-8 pt-6 flex-1">
+                        <ul className="space-y-3.5">
+                          {plan.features.map((f) => (
+                            <li key={f} className="flex items-start gap-3 text-sm">
+                              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                                <Check className="h-3 w-3 text-primary" />
+                              </span>
+                              <span className="text-muted-foreground">{f}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="p-8 pt-0">
+                        <Button
+                          className="w-full rounded-xl"
+                          variant={plan.popular ? "default" : "outline"}
+                          size="lg"
+                          asChild
+                        >
+                          <Link href="/contact">
+                            Get Started <ArrowRight className="ml-1.5 h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </div>
                     </CardContent>
-                    <CardFooter className="p-6 pt-0">
-                      <Button
-                        className="w-full"
-                        variant={plan.popular ? "default" : "outline"}
-                        asChild
-                      >
-                        <Link href="/contact">
-                          {plan.price === "Custom"
-                            ? "Contact Us"
-                            : "Get Started"}
-                          <ArrowRight className="ml-1 h-4 w-4" />
-                        </Link>
-                      </Button>
-                    </CardFooter>
                   </Card>
-                </motion.div>
-              ))}
+                  </motion.div>
+                ))}
             </div>
           </div>
         </section>
 
-        {/* FAQ */}
-        <section className="border-t bg-muted/30 py-20 md:py-28">
-          <div className="container max-w-3xl">
-            <motion.h2
-              {...fadeIn}
-              className="text-3xl font-bold tracking-tight md:text-4xl text-center"
+        {/* CTA */}
+        <section className="border-t bg-muted/30 py-16 md:py-20">
+          <div className="container max-w-3xl text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
             >
-              Frequently asked questions
-            </motion.h2>
-            <div className="mt-12 space-y-6">
-              {[
-                {
-                  q: "Can I upgrade my plan at any time?",
-                  a: "Yes. You can upgrade or downgrade your plan at any time. Changes take effect immediately.",
-                },
-                {
-                  q: "What payment methods do you accept?",
-                  a: "We accept all major credit cards, PayPal, and wire transfers for Enterprise plans.",
-                },
-                {
-                  q: "Do you offer a free trial?",
-                  a: "Yes. We offer a 14-day free trial on all plans. No credit card required.",
-                },
-                {
-                  q: "What kind of support do you provide?",
-                  a: "All plans include email support. Growth plans add chat support, and Enterprise includes 24/7 phone support.",
-                },
-              ].map((faq, i) => (
-                <motion.div
-                  key={faq.q}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  <h3 className="font-semibold">{faq.q}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{faq.a}</p>
-                </motion.div>
-              ))}
-            </div>
+              <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
+                Not sure which package fits?
+              </h2>
+              <p className="mt-4 text-muted-foreground text-base md:text-lg">
+                Every project is unique. Let&apos;s discuss your requirements and
+                we&apos;ll recommend the right approach — no pressure, no commitment.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+                <Button size="lg" asChild className="rounded-xl">
+                  <Link href="/contact">
+                    Talk to Us <ArrowRight className="ml-1.5 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild className="rounded-xl">
+                  <Link href="/services">
+                    View Services
+                  </Link>
+                </Button>
+              </div>
+            </motion.div>
           </div>
         </section>
       </main>

@@ -3,13 +3,14 @@
 import { motion } from "framer-motion"
 import {
   ArrowRight,
+  Globe,
   Bot,
-  Brain,
-  Sparkles,
   TrendingUp,
-  Users,
-  Shield,
-  Code,
+  BarChart3,
+  Smartphone,
+  Clapperboard,
+  SearchCheck,
+  Check,
 } from "lucide-react"
 import Link from "next/link"
 import { Navbar } from "@/src/components/layout/navbar"
@@ -26,69 +27,73 @@ const fadeIn = {
 
 const services = [
   {
+    icon: Globe,
+    title: "Fullstack Web Development",
+    desc: "Business websites, SaaS platforms, dashboards, and admin systems with scalable architectures and responsive UI.",
+    features: [
+      "Business websites",
+      "SaaS platforms",
+      "Dashboards & admin systems",
+      "Scalable architectures",
+      "Responsive UI systems",
+    ],
+  },
+  {
+    icon: Smartphone,
+    title: "App Development",
+    desc: "Native and cross-platform mobile applications with seamless backend integration, offline support, and polished UX.",
+    features: [
+      "iOS & Android apps",
+      "Cross-platform development",
+      "Backend integration",
+      "Offline & real-time sync",
+      "App store deployment",
+    ],
+  },
+  {
+    icon: SearchCheck,
+    title: "SEO Services",
+    desc: "On-page and technical SEO, keyword research, content strategy, and performance analytics to improve search rankings.",
+    features: [
+      "On-page SEO",
+      "Technical SEO audits",
+      "Keyword research & strategy",
+      "Content optimization",
+      "Ranking analytics",
+    ],
+  },
+  {
     icon: Bot,
-    title: "AI Automation",
-    desc: "Automate repetitive tasks, workflows, and processes with intelligent agents that learn and adapt to your business logic.",
+    title: "AI Systems Integration",
+    desc: "Intelligent AI assistants, RAG chatbot systems, and AI-powered web experiences that transform how you operate.",
     features: [
-      "Workflow automation",
-      "Document processing",
-      "Data extraction & entry",
-      "Process optimization",
+      "AI assistants",
+      "RAG chatbot systems",
+      "Intelligent web experiences",
+      "AI support systems",
     ],
   },
   {
-    icon: Brain,
-    title: "Machine Learning",
-    desc: "Custom ML models engineered for your specific use case — from classification to regression to recommendation systems.",
+    icon: BarChart3,
+    title: "Dashboard Systems",
+    desc: "Powerful admin dashboards, analytics systems, lead management, and reporting interfaces for data-driven decisions.",
     features: [
-      "Predictive modeling",
-      "Classification systems",
-      "Recommendation engines",
-      "Anomaly detection",
+      "Admin dashboards",
+      "Analytics systems",
+      "Lead management",
+      "Reporting interfaces",
     ],
   },
   {
-    icon: Sparkles,
-    title: "Generative AI",
-    desc: "Harness the power of LLMs to generate content, code, insights, and conversations that feel human.",
+    icon: Clapperboard,
+    title: "Video Editing",
+    desc: "Professional video production, motion graphics, and post-production services for marketing, brand stories, and content.",
     features: [
-      "Chatbots & assistants",
-      "Content generation",
-      "Code generation",
-      "Summarization",
-    ],
-  },
-  {
-    icon: TrendingUp,
-    title: "Predictive Analytics",
-    desc: "Turn your data into foresight. Forecast trends, customer behavior, and market movements with precision.",
-    features: [
-      "Sales forecasting",
-      "Customer churn prediction",
-      "Risk assessment",
-      "Demand planning",
-    ],
-  },
-  {
-    icon: Shield,
-    title: "AI Security & Compliance",
-    desc: "Enterprise-grade security, privacy, and compliance built into every solution from day one.",
-    features: [
-      "Model auditing",
-      "Bias detection",
-      "Data privacy",
-      "Regulatory compliance",
-    ],
-  },
-  {
-    icon: Code,
-    title: "Custom Development",
-    desc: "End-to-end development of AI-powered applications, from proof-of-concept to production deployment.",
-    features: [
-      "POC development",
-      "API integration",
-      "Deployment & scaling",
-      "Monitoring & maintenance",
+      "Marketing videos",
+      "Motion graphics",
+      "Post-production editing",
+      "Brand storytelling",
+      "Social media content",
     ],
   },
 ]
@@ -108,11 +113,11 @@ export default function ServicesPage() {
             >
               <Badge className="mb-4 px-3 py-1">Our Services</Badge>
               <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-                Full-stack AI development, delivered
+                What we build for you
               </h1>
               <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-                From strategy to deployment — we provide end-to-end AI services
-                that solve real business problems.
+                From fullstack web apps to AI-powered systems — we deliver
+                production-ready solutions that drive real results.
               </p>
             </motion.div>
           </div>
@@ -128,26 +133,27 @@ export default function ServicesPage() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
+                  transition={{ delay: i * 0.1 }}
+                  whileHover={{ y: -6, scale: 1.01, transition: { duration: 0.25, ease: "easeOut" } }}
                 >
-                  <Card className="group h-full transition-all hover:shadow-lg hover:border-primary/50">
-                    <CardContent className="p-6">
-                      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                        <service.icon className="h-6 w-6" />
+                  <Card className="group h-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/30">
+                    <CardContent className="p-8">
+                      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 text-primary ring-1 ring-primary/20 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/20">
+                        <service.icon className="h-7 w-7" />
                       </div>
-                      <h3 className="mb-2 text-lg font-semibold">
+                      <h3 className="mb-3 text-xl font-semibold">
                         {service.title}
                       </h3>
-                      <p className="text-sm text-muted-foreground mb-6">
+                      <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
                         {service.desc}
                       </p>
-                      <ul className="space-y-2">
+                      <ul className="space-y-2.5">
                         {service.features.map((f) => (
                           <li
                             key={f}
-                            className="text-sm flex items-center gap-2"
+                            className="text-sm flex items-center gap-2.5"
                           >
-                            <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                            <Check className="h-4 w-4 shrink-0 text-primary" />
                             {f}
                           </li>
                         ))}
@@ -163,23 +169,24 @@ export default function ServicesPage() {
         {/* Process */}
         <section className="border-y bg-muted/30 py-20 md:py-28">
           <div className="container">
-            <motion.div
-              {...fadeIn}
-              className="mx-auto max-w-3xl text-center"
-            >
-              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-                How we work
+            <motion.div {...fadeIn} className="mx-auto max-w-3xl text-center">
+              <Badge variant="secondary" className="mb-4 px-3 py-1 tracking-wide">Process</Badge>
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
+                How we{" "}
+                <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+                  deliver
+                </span>
               </h2>
-              <p className="mt-4 text-muted-foreground">
-                A proven process that delivers results.
+              <p className="mt-4 text-muted-foreground text-base md:text-lg">
+                A proven process that takes your project from idea to launch.
               </p>
             </motion.div>
             <div className="mt-12 grid gap-6 md:grid-cols-4">
               {[
-                { step: "01", title: "Discovery", desc: "We learn your business, goals, and data landscape." },
-                { step: "02", title: "Design", desc: "We architect a solution tailored to your needs." },
-                { step: "03", title: "Build", desc: "We develop, train, and iterate rapidly." },
-                { step: "04", title: "Deploy", desc: "We ship to production and monitor performance." },
+                { step: "01", title: "Discovery", desc: "We learn your business, goals, and requirements." },
+                { step: "02", title: "Design", desc: "We architect and design the perfect solution." },
+                { step: "03", title: "Build", desc: "We develop, integrate, and iterate rapidly." },
+                { step: "04", title: "Deploy", desc: "We ship, monitor, and support long-term." },
               ].map((step, i) => (
                 <motion.div
                   key={step.step}
@@ -189,10 +196,10 @@ export default function ServicesPage() {
                   transition={{ delay: i * 0.1 }}
                   className="text-center"
                 >
-                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm">
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 text-primary-foreground font-bold text-sm shadow-lg shadow-primary/25">
                     {step.step}
                   </div>
-                  <h3 className="font-semibold">{step.title}</h3>
+                  <h3 className="font-semibold text-lg">{step.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">
                     {step.desc}
                   </p>
@@ -205,20 +212,20 @@ export default function ServicesPage() {
         {/* CTA */}
         <section className="py-20 md:py-28">
           <div className="container">
-            <motion.div
-              {...fadeIn}
-              className="mx-auto max-w-3xl text-center"
-            >
-              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-                Need a custom solution?
+            <motion.div {...fadeIn} className="mx-auto max-w-3xl text-center">
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
+                Ready to build{" "}
+                <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+                  something great?
+                </span>
               </h2>
               <p className="mt-4 text-lg text-muted-foreground">
-                We&apos;ll build exactly what you need.
+                Tell us about your project and we&apos;ll craft the perfect solution.
               </p>
               <div className="mt-8">
-                <Button size="lg" asChild>
+                <Button size="lg" asChild className="rounded-xl gap-1.5">
                   <Link href="/contact">
-                    Let&apos;s Talk <ArrowRight className="ml-1 h-4 w-4" />
+                    Let&apos;s Talk <ArrowRight className="h-4 w-4" />
                   </Link>
                 </Button>
               </div>

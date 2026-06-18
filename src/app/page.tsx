@@ -6,13 +6,14 @@ import Link from "next/link"
 import {
   ArrowRight,
   Bot,
-  Brain,
+  BarChart3,
   CheckCircle,
   ChevronRight,
-  Cpu,
+  Clapperboard,
   Globe,
-  Layers,
   MessageSquare,
+  SearchCheck,
+  Smartphone,
   Sparkles,
   Star,
   TrendingUp,
@@ -61,11 +62,13 @@ function AnimatedCounter({ target, suffix = "", label }: { target: number; suffi
       transition={{ duration: 0.4 }}
       className="text-center"
     >
-      <motion.span className="text-4xl font-bold tracking-tight text-primary md:text-5xl">
-        <motion.span>{rounded}</motion.span>
-        {suffix}
-      </motion.span>
-      <div className="mt-1 text-sm text-muted-foreground">{label}</div>
+      <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full border-2 border-primary/20 bg-gradient-to-b from-primary/5 to-transparent ring-1 ring-primary/10 shadow-lg shadow-primary/5 md:h-32 md:w-32">
+        <motion.span className="text-3xl font-bold tracking-tight text-primary md:text-4xl">
+          <motion.span>{rounded}</motion.span>
+          {suffix}
+        </motion.span>
+      </div>
+      <div className="mt-4 text-sm text-muted-foreground">{label}</div>
     </motion.div>
   )
 }
@@ -204,18 +207,18 @@ const stats = [
 ]
 
 const features = [
-  { icon: Bot, title: "Intelligent Automation", desc: "Deploy AI agents that automate complex workflows, reduce manual effort by 80%, and scale effortlessly." },
-  { icon: Brain, title: "Custom ML Models", desc: "Train proprietary models on your data. From classification to regression, built for your exact use case." },
-  { icon: Sparkles, title: "Generative AI", desc: "Integrate LLMs for content generation, code assistance, intelligent search, and human-like conversation." },
-  { icon: TrendingUp, title: "Predictive Analytics", desc: "Forecast trends, predict churn, and optimize operations with data-driven intelligence." },
-  { icon: Layers, title: "Seamless Integration", desc: "Plug into your existing stack with pre-built connectors for Slack, Salesforce, AWS, and 200+ tools." },
-  { icon: Cpu, title: "Edge & Cloud Deploy", desc: "Deploy anywhere — cloud, on-premise, or edge. Fully managed infrastructure with auto-scaling." },
+  { icon: Globe, title: "Fullstack Web Development", desc: "Business websites, SaaS platforms, dashboards, and admin systems with scalable architectures and premium responsive UI." },
+  { icon: Smartphone, title: "App Development", desc: "Native and cross-platform mobile applications with seamless backend integration and polished user experiences." },
+  { icon: SearchCheck, title: "SEO Services", desc: "On-page and technical SEO, keyword strategy, content optimization, and analytics to boost search rankings and organic traffic." },
+  { icon: Bot, title: "AI Systems Integration", desc: "Intelligent AI assistants, RAG chatbot systems, and AI-powered web experiences that transform how you operate." },
+  { icon: BarChart3, title: "Dashboard Systems", desc: "Powerful admin dashboards, analytics systems, lead management, and reporting interfaces for data-driven decisions." },
+  { icon: Clapperboard, title: "Video Editing", desc: "Professional video production, motion graphics, and post-production services for marketing, brand stories, and content." },
 ]
 
 const testimonials = [
-  { quote: "Devion transformed our customer operations. What took our team 8 hours now takes 12 minutes.", author: "Sarah Chen", role: "CTO, TechFlow Inc." },
-  { quote: "The predictive analytics module saved us $2.3M in Q3 alone. The accuracy is remarkable.", author: "Marcus Rivera", role: "VP Engineering, DataSync" },
-  { quote: "We evaluated 12 AI platforms. Devion was the only one that could deploy to our air-gapped environment.", author: "Emily Park", role: "Head of AI, SecureNet" },
+  { quote: "Devion transformed our customer operations. What took our team 8 hours now takes 12 minutes.", author: "Sarah Chen", role: "CTO, TechFlow Inc.", initials: "SC", color: "from-green-400 to-emerald-600" },
+  { quote: "The predictive analytics module saved us $2.3M in Q3 alone. The accuracy is remarkable.", author: "Marcus Rivera", role: "VP Engineering, DataSync", initials: "MR", color: "from-blue-400 to-indigo-600" },
+  { quote: "We evaluated 12 AI platforms. Devion was the only one that could deploy to our air-gapped environment.", author: "Emily Park", role: "Head of AI, SecureNet", initials: "EP", color: "from-purple-400 to-violet-600" },
 ]
 
 const steps = [
@@ -270,7 +273,7 @@ export default function Home() {
                   Solutions
                 </span>
                 <br />
-                for the{" "}
+                <span className="text-white">for the</span>{" "}
                 <span className="bg-gradient-to-r from-primary/60 via-primary to-primary/80 bg-clip-text text-transparent">
                   Future
                 </span>
@@ -334,33 +337,22 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ─── STATS ─── */}
-        <Section className="bg-muted/40 py-20 md:py-24">
-          <div className="container">
-            <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-              {stats.map((stat) => (
-                <AnimatedCounter key={stat.label} {...stat} />
-              ))}
-            </div>
-          </div>
-        </Section>
-
         {/* ─── FEATURES ─── */}
         <Section className="py-24 md:py-32" id="features">
           <div className="container">
             <motion.div {...fadeUp(0)} className="mx-auto max-w-3xl text-center">
-              <Badge variant="secondary" className="mb-4 px-3 py-1 tracking-wide">Platform</Badge>
+              <Badge variant="secondary" className="mb-4 px-3 py-1 tracking-wide">What We Build</Badge>
               <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-                Everything you need to{" "}
+                From idea to{" "}
                 <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
-                  ship AI at scale
+                  production-ready solution
                 </span>
               </h2>
               <p className="mt-4 text-lg text-muted-foreground">
-                A complete platform with tools, infrastructure, and expertise — so you can focus on results, not setup.
+                We design and build everything you need to grow — from fullstack applications to AI-powered systems.
               </p>
             </motion.div>
-            <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {features.map((feature, i) => (
                 <FeatureCard key={feature.title} feature={feature} i={i} />
               ))}
@@ -420,6 +412,17 @@ export default function Home() {
           </div>
         </Section>
 
+        {/* ─── STATS ─── */}
+        <Section className="bg-muted/40 py-20 md:py-24">
+          <div className="container">
+            <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+              {stats.map((stat) => (
+                <AnimatedCounter key={stat.label} {...stat} />
+              ))}
+            </div>
+          </div>
+        </Section>
+
         {/* ─── TESTIMONIALS ─── */}
         <Section className="py-24 md:py-32">
           <div className="container">
@@ -436,7 +439,7 @@ export default function Home() {
               </p>
             </motion.div>
 
-            <div className="mt-16 grid gap-6 md:grid-cols-3">
+            <div className="mt-16 grid gap-8 md:grid-cols-3">
               {testimonials.map((t, i) => (
                 <motion.div
                   key={t.author}
@@ -446,33 +449,25 @@ export default function Home() {
                   transition={{ delay: i * 0.12, duration: 0.5 }}
                   whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.25, ease: "easeOut" } }}
                 >
-                  <Card className="group h-full transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/30">
-                    <CardContent className="p-6">
-                      <motion.div
-                        className="mb-4 flex gap-1"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.12 + 0.2 }}
-                      >
+                  <Card className="group relative h-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/30">
+                    <div className={`absolute top-0 right-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-gradient-to-br ${t.color} opacity-10 blur-2xl`} />
+                    <CardContent className="relative p-6">
+                      <div className="mb-4 flex gap-1">
                         {Array.from({ length: 5 }).map((_, j) => (
-                          <motion.div
-                            key={j}
-                            initial={{ opacity: 0, scale: 0 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.12 + 0.2 + j * 0.05 }}
-                          >
-                            <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                          </motion.div>
+                          <Star key={j} className="h-4 w-4 fill-amber-400 text-amber-400" />
                         ))}
-                      </motion.div>
-                      <blockquote className="mb-4 text-sm leading-relaxed text-muted-foreground">
+                      </div>
+                      <blockquote className="mb-6 text-sm leading-relaxed text-muted-foreground">
                         &ldquo;{t.quote}&rdquo;
                       </blockquote>
-                      <div className="border-t pt-4">
-                        <div className="text-sm font-semibold">{t.author}</div>
-                        <div className="text-xs text-muted-foreground">{t.role}</div>
+                      <div className="flex items-center gap-3 border-t pt-4">
+                        <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${t.color} text-xs font-bold text-white`}>
+                          {t.initials}
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold">{t.author}</div>
+                          <div className="text-xs text-muted-foreground">{t.role}</div>
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
