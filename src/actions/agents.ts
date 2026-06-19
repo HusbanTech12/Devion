@@ -1,13 +1,14 @@
 "use server"
 
-import { auth } from "@clerk/nextjs/server"
+import { headers } from "next/headers"
 import { revalidatePath } from "next/cache"
-import { createClient } from "@/src/lib/supabase/server"
+import { auth } from "@/src/lib/auth"
+import { db } from "@/src/lib/db"
 import { createAgentSchema } from "@/src/lib/validation"
 
 export async function createAgent(data: FormData | unknown) {
-  const { userId } = await auth()
-  if (!userId) return { success: false, error: "Unauthorized" } as const
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) return { success: false, error: "Unauthorized" } as const
 
   const parsed = createAgentSchema.safeParse(
     data instanceof FormData ? Object.fromEntries(data) : data
@@ -16,30 +17,26 @@ export async function createAgent(data: FormData | unknown) {
     return { success: false, error: parsed.error.message } as const
   }
 
-  const supabase = await createClient()
-  const { data: agent, error } = await supabase
-    .from("agents")
-    .insert({ user_id: userId, ...parsed.data })
-    .select()
-    .single()
-
-  if (error) return { success: false, error: error.message } as const
+  const agent = await db
+    .insertInto("agents")
+    .values({ user_id: session.user.id, ...parsed.data } as any)
+    .returningAll()
+    .executeTakeFirst()
 
   revalidatePath("/dashboard/agents")
   return { success: true, data: agent }
 }
 
 export async function getAgents() {
-  const { userId } = await auth()
-  if (!userId) return { success: false, error: "Unauthorized" } as const
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) return { success: false, error: "Unauthorized" } as const
 
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .from("agents")
-    .select("*")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false })
+  const data = await db
+    .selectFrom("agents")
+    .selectAll()
+    .where("user_id", "=", session.user.id)
+    .orderBy("created_at", "desc")
+    .execute()
 
-  if (error) return { success: false, error: error.message } as const
   return { success: true, data }
 }

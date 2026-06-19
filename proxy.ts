@@ -1,9 +1,9 @@
-import { clerkMiddleware } from "@clerk/nextjs/server"
+import type { NextRequest } from "next/server"
 
-export default clerkMiddleware()
+export async function proxy(_request: NextRequest) {
+  // Session validation handled by dashboard layout via auth.api.getSession()
+}
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|images|logo-preview.html).*)",
-  ],
+  matcher: [],
 }

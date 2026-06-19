@@ -1,39 +1,37 @@
 "use server"
 
-import { auth, clerkClient } from "@clerk/nextjs/server"
-import { createAdminClient } from "@/src/lib/supabase/admin"
+import { headers } from "next/headers"
+import { auth } from "@/src/lib/auth"
+import { db } from "@/src/lib/db"
+import { ADMIN_EMAILS } from "@/src/lib/constants"
 
 export async function syncUser() {
-  const { userId } = await auth()
-  if (!userId) return { success: false, error: "Unauthorized" } as const
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) return { success: false, error: "Unauthorized" } as const
 
-  const client = await clerkClient()
-  const clerkUser = await client.users.getUser(userId)
-  const email = clerkUser.emailAddresses[0]?.emailAddress
-  if (!email) return { success: false, error: "No email found" } as const
+  const { user } = session
+  const email = user.email
+  const role = ADMIN_EMAILS.includes(email) ? "admin" : "client"
 
-  const supabase = createAdminClient()
-
-  const { data: existing } = await supabase
-    .from("users")
+  const existing = await db
+    .selectFrom("users")
     .select("id")
-    .eq("clerk_id", userId)
-    .single()
+    .where("id", "=", user.id)
+    .executeTakeFirst()
 
   if (existing) {
     return { success: true, data: existing }
   }
 
-  const { data, error } = await supabase
-    .from("users")
-    .insert({
-      clerk_id: userId,
+  await db
+    .insertInto("users")
+    .values({
+      id: user.id,
       email,
-      name: `${clerkUser.firstName ?? ""} ${clerkUser.lastName ?? ""}`.trim() || null,
+      name: (user as any).name || null,
+      role,
     })
-    .select()
-    .single()
+    .execute()
 
-  if (error) return { success: false, error: error.message } as const
-  return { success: true, data }
+  return { success: true, data: { id: user.id, email, role } }
 }

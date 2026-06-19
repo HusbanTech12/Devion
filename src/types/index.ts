@@ -2,7 +2,7 @@ export type ActionResponse<T = unknown> =
   | { success: true; data: T }
   | { success: false; error: string }
 
-export type UserRole = "admin" | "member" | "viewer"
+export type UserRole = "admin" | "team" | "client"
 
 export type ProjectStatus = "active" | "completed" | "paused" | "cancelled"
 
@@ -43,7 +43,6 @@ export interface SubscriptionPlan {
 
 export interface UserProfile {
   id: string
-  clerkId: string
   email: string
   name?: string
   role: UserRole

@@ -6,28 +6,25 @@ export interface Database {
       users: {
         Row: {
           id: string
-          clerk_id: string
           email: string
           name: string | null
-          role: "admin" | "member" | "viewer"
+          role: "admin" | "team" | "client"
           created_at: string
           updated_at: string
         }
         Insert: {
-          id?: string
-          clerk_id: string
+          id: string
           email: string
           name?: string | null
-          role?: "admin" | "member" | "viewer"
+          role?: "admin" | "team" | "client"
           created_at?: string
           updated_at?: string
         }
         Update: {
           id?: string
-          clerk_id?: string
           email?: string
           name?: string | null
-          role?: "admin" | "member" | "viewer"
+          role?: "admin" | "team" | "client"
           created_at?: string
           updated_at?: string
         }

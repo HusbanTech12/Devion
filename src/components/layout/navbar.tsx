@@ -56,6 +56,11 @@ export function Navbar() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
+          <Button asChild variant="ghost" size="sm" className="rounded-xl">
+            <Link href="/sign-in">
+              Sign in
+            </Link>
+          </Button>
           <Button asChild size="sm" className="rounded-xl gap-1.5">
             <Link href="/contact">
               Get Started
@@ -100,7 +105,12 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <Button className="w-full mt-3 rounded-xl" asChild>
+              <Button variant="ghost" className="w-full rounded-xl" asChild>
+                <Link href="/sign-in" onClick={() => setOpen(false)}>
+                  Sign in
+                </Link>
+              </Button>
+              <Button className="w-full mt-2 rounded-xl" asChild>
                 <Link href="/contact" onClick={() => setOpen(false)}>
                   Get Started
                 </Link>

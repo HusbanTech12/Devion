@@ -9,7 +9,7 @@
 | Styling | **Tailwind CSS v4** | `@import "tailwindcss"` (NOT `@tailwind` directives) |
 | UI Library | **shadcn/ui** | Install with `npx shadcn@latest add ...` |
 | Animations | **Framer Motion** | `framer-motion` |
-| Auth | **Clerk** | `@clerk/nextjs` |
+| Auth | **Better Auth** | `better-auth` + `better-auth/next-js` |
 | Database | **Supabase PostgreSQL** | `@supabase/supabase-js` + `@supabase/ssr` |
 | Email | **Resend** + **React Email** | `resend`, `@react-email/components` |
 | Validation | **Zod** | |
@@ -49,7 +49,7 @@ src/
 │   │   └── sign-up/
 │   │       └── page.tsx
 │   │
-│   ├── (dashboard)/              # Dashboard route group (protected)
+│   ├── dashboard/               # Dashboard routes (protected)
 │   │   ├── layout.tsx            # Dashboard shell (sidebar, header)
 │   │   ├── page.tsx              # Dashboard home
 │   │   ├── agents/
@@ -79,7 +79,7 @@ src/
 │   │   │       └── route.ts
 │   │   └── ...
 │   │
-│   ├── layout.tsx                # Root layout (ClerkProvider, ThemeProvider)
+│   ├── layout.tsx                # Root layout (ThemeProvider)
 │   ├── page.tsx                  # Redirect to marketing or dashboard
 │   └── globals.css               # Tailwind import + CSS variables
 │
@@ -111,8 +111,9 @@ src/
 │   │   ├── client.ts             # Browser client
 │   │   ├── server.ts             # Server client (Server Components, Actions)
 │   │   └── admin.ts              # Service role client (admin-only)
-│   ├── clerk/
-│   │   └── helpers.ts            # Clerk utility functions
+│   ├── auth.ts                   # Better Auth config + RBAC helpers
+│   ├── auth-client.ts            # Client-side auth client
+│   ├── db.ts                     # Kysely database instance for Better Auth
 │   ├── resend/
 │   │   └── send.ts               # Email sending helper
 │   └── utils.ts                  # cn(), formatDate(), etc.
@@ -140,7 +141,7 @@ src/
 ### 1. Server Functions (Server Actions)
 
 - Place mutation logic in `src/actions/` — one file per domain
-- Always verify auth within every Server Function
+- Always verify auth within every Server Function using Better Auth
 - Use `'use server'` at module level (file-level directive)
 - Return typed responses: `{ success: true, data: T } | { success: false, error: string }`
 
@@ -148,7 +149,8 @@ src/
 // src/actions/agents.ts
 "use server"
 
-import { auth } from "@clerk/nextjs/server"
+import { headers } from "next/headers"
+import { auth } from "@/src/lib/auth"
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
 
@@ -158,8 +160,8 @@ const createAgentSchema = z.object({
 })
 
 export async function createAgent(data: FormData | z.infer<typeof createAgentSchema>) {
-  const { userId } = await auth()
-  if (!userId) return { success: false, error: "Unauthorized" } as const
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) return { success: false, error: "Unauthorized" } as const
 
   const parsed = createAgentSchema.safeParse(data)
   if (!parsed.success) return { success: false, error: parsed.error.message } as const
@@ -178,7 +180,7 @@ export async function createAgent(data: FormData | z.infer<typeof createAgentSch
 - No caching by default
 
 ```ts
-// src/app/api/webhooks/clerk/route.ts
+// src/app/api/webhooks/stripe/route.ts
 export async function POST(req: Request) {
   const payload = await req.json()
   return Response.json({ received: true })
@@ -192,12 +194,15 @@ export async function POST(req: Request) {
 - **Admin context**: Use `src/lib/supabase/admin.ts` (service role key, server-only)
 - Never expose the service role key to the client
 
-### 4. Auth (Clerk)
+### 4. Auth (Better Auth)
 
-- Wrap root layout with `<ClerkProvider>`
-- Protect dashboard routes via `layout.tsx` with `auth()` check
-- Use `<SignedIn>` / `<SignedOut>` for conditional rendering
-- Webhook in `src/app/api/webhooks/clerk/route.ts` for user lifecycle events
+- Better Auth manages its own `user`, `session`, `account`, `verification` tables via Kysely adapter
+- User role (`admin` / `team` / `client`) stored as additional field on Better Auth's user model
+- Server components/actions use `auth.api.getSession({ headers: await headers() })`
+- Client components use `useSession()` hook from `better-auth/react`
+- Auth API routes at `src/app/api/auth/[...all]/route.ts`
+- Proxy (`proxy.ts`) checks session cookie for protected routes
+- Admin emails configured in `src/lib/constants.ts` `ADMIN_EMAILS`
 
 ### 5. Forms
 
@@ -248,11 +253,11 @@ export async function POST(req: Request) {
 ## Authentication Flow
 
 1. User visits → marketing landing page (public)
-2. Clicks "Get Started" → Clerk-hosted or custom sign-up form
-3. Clerk webhook creates user record in Supabase
+2. Clicks "Get Started" → custom sign-up form
+3. Better Auth creates user record in its own `user` table
 4. After sign-in → redirected to dashboard
-5. Dashboard layout checks `auth()` → redirects to `/sign-in` if unauthenticated
-6. Server Actions verify `userId` on every call
+5. Dashboard layout checks `auth.api.getSession()` → redirects to `/sign-in` if unauthenticated
+6. Server Actions verify session on every call
 
 ## Data Flow
 
@@ -264,12 +269,15 @@ export async function POST(req: Request) {
 ## Environment Variables
 
 ```
-# Clerk
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
-CLERK_WEBHOOK_SECRET=
+# Better Auth
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=
 
-# Supabase
+# Supabase (PostgreSQL)
+DATABASE_URL=
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
@@ -325,200 +333,320 @@ npm run dev
 | **🔴 Premium** | $3,000 – $8,000+ | Advanced AI systems, custom dashboards, scalable architecture, premium UI systems, analytics platform, premium support | Serious businesses & startups |
 | **🎬 Video Editing** | $200 – $500 | Marketing videos, motion graphics, post-production, brand storytelling, social media content | Content creators & brands |
 
-# Dashboard System Requirements (CRITICAL)
+# Role Based Access Control (RBAC)
 
-## Dashboard Philosophy
+## Overview
 
-The dashboard must NOT feel like a traditional admin panel.
+The platform must implement enterprise-grade Role-Based Access Control (RBAC).
 
-The dashboard should feel like a premium SaaS operating system inspired by:
+Every user must belong to exactly one role.
 
-* Linear
-* Stripe
-* Vercel
-* Notion
-* Raycast
-* Arc Browser
+Available roles:
 
-Every dashboard page should communicate:
+* admin
+* team
+* client
 
-* Speed
-* Trust
-* Intelligence
-* Simplicity
-* Premium quality
+Permissions must be enforced on:
 
----
+* Dashboard routes
+* Server Functions
+* API Routes
+* Database queries
+* UI components
 
-## Dashboard Layout
+Never rely solely on frontend checks.
 
-Required layout:
-
-* Collapsible Sidebar
-* Sticky Header
-* Global Search
-* Command Palette (Ctrl/Cmd + K)
-* Notification Center
-* User Menu
-* Theme Switcher
-* Responsive Mobile Navigation
-
-The dashboard shell must be reusable across all dashboard routes.
+Always validate permissions on the server.
 
 ---
 
-## Dashboard Navigation
+# User Model
 
-Required modules:
+```ts
+type UserRole =
+  | "admin"
+  | "team"
+  | "client"
+```
+
+```ts
+type User = {
+  id: string
+  email: string
+  fullName: string
+  role: UserRole
+}
+```
+
+---
+
+# Admin Role
+
+Admin has full platform access.
+
+Capabilities:
+
+* View all projects
+
+* Create projects
+
+* Edit projects
+
+* Delete projects
+
+* View all clients
+
+* Create clients
+
+* Edit clients
+
+* Delete clients
+
+* View all team members
+
+* Invite team members
+
+* Remove team members
+
+* View analytics
+
+* View revenue
+
+* Manage billing
+
+* Manage CRM
+
+* Manage AI agents
+
+* Manage settings
+
+* Access every dashboard route
+
+Admin can view all data across the platform.
+
+---
+
+# Team Role
+
+Team members have operational access.
+
+Capabilities:
+
+* View assigned projects
+
+* Update assigned projects
+
+* Manage tasks
+
+* Update project status
+
+* View assigned clients
+
+* Add notes
+
+* Upload files
+
+* Use AI workspace
+
+* Access documents
+
+Cannot:
+
+* Delete projects
+* Access billing
+* Access revenue analytics
+* Manage users
+* Manage permissions
+* Access system settings
+
+Team users only see data assigned to them.
+
+---
+
+# Client Role
+
+Clients have limited access.
+
+Capabilities:
+
+* View their own projects
+* View project progress
+* View milestones
+* View shared files
+* View invoices
+* Send messages
+
+Cannot:
+
+* Access CRM
+* Access team management
+* Access analytics
+* Access internal documents
+* Access AI workspace
+* Access settings
+
+Clients should only see their own information.
+
+---
+
+# Dashboard Visibility
+
+## Admin Navigation
 
 * Overview
 * Projects
 * Clients
 * CRM
 * Analytics
-* AI Assistant
-* Documents
+* Agents
 * Activity
 * Team
+* Billing
 * Settings
 
-Future-ready modules:
+---
+
+## Team Navigation
+
+* Overview
+* Projects
+* Activity
+* Documents
+* Agents
+
+Hide:
 
 * Billing
-* Automations
-* Infrastructure
-* Integrations
+* Revenue
+* Settings
+* Team Management
 
 ---
 
-## Dashboard Overview
+## Client Navigation
 
-The dashboard home page should contain:
+* Overview
+* My Projects
+* Files
+* Invoices
+* Messages
 
-* Welcome section
-* Revenue metrics
-* Active projects
-* Client statistics
-* Team productivity
-* AI insights
-* Recent activity feed
-* Upcoming deadlines
-* Quick actions
-
-The overview page should provide a complete business snapshot.
+Hide everything else.
 
 ---
 
-## Projects Module
+# Route Protection
 
-Required features:
+Admin Only:
 
-* Kanban View
-* List View
-* Status Tracking
-* Priority System
-* Milestones
-* Deadlines
-* Team Assignment
-* Progress Indicators
+* /dashboard/settings
+* /dashboard/team
+* /dashboard/billing
 
----
+Admin + Team:
 
-## Clients Module
+* /dashboard/projects
+* /dashboard/activity
+* /dashboard/agents
 
-Required features:
+Admin + Client:
 
-* Client Directory
-* Client Profiles
-* Contact Information
-* Active Projects
-* Notes
-* Activity History
+* /dashboard/files
+* /dashboard/invoices
+
+All authenticated users:
+
+* /dashboard
 
 ---
 
-## CRM Module
+# Server Function Protection
 
-Required features:
+Every Server Function must:
 
-* Lead Management
-* Sales Pipeline
-* Opportunity Tracking
-* Meeting Tracking
-* Activity Logging
+1. Verify authentication
+2. Verify role
+3. Verify ownership if required
 
----
+Example:
 
-## Analytics Module
+```ts
+const { userId } = await auth()
 
-Required features:
+if (!userId) {
+  throw new Error("Unauthorized")
+}
 
-* Revenue Analytics
-* Project Analytics
-* Client Growth Analytics
-* Team Performance Analytics
-
-Charts must use Recharts.
-
----
-
-## AI Assistant Module
-
-Required features:
-
-* Chat Interface
-* Proposal Generator
-* Content Generator
-* Business Insights
-* AI Recommendations
-
-The AI assistant should feel like an integrated workspace rather than a chatbot page.
+if (user.role !== "admin") {
+  throw new Error("Forbidden")
+}
+```
 
 ---
 
-## Design Standards
+# Data Ownership Rules
 
-All dashboard pages must:
+Admins:
 
-* Use shadcn/ui
-* Use Framer Motion
-* Follow consistent spacing
-* Use responsive layouts
-* Support dark mode
-* Support loading states
-* Support empty states
-* Support error states
+* Access all records
 
-Avoid:
+Team:
 
-* Generic templates
-* Bootstrap-style dashboards
-* Crowded layouts
-* Excessive colors
+* Access assigned records only
+
+Clients:
+
+* Access owned records only
+
+Never expose data that does not belong to the current user.
 
 ---
 
-## UI Components
+# Better Auth Integration
 
-Required reusable components:
+Role is stored as an additional field on Better Auth's user model.
 
-* Metric Cards
-* Data Tables
-* Empty States
-* Loading Skeletons
-* Charts
-* Activity Timeline
-* Status Badges
-* Search Inputs
-* Filters
-* Dialogs
-* Drawers
-* Toast Notifications
+Better Auth manages its own tables:
+
+* `user` — user accounts with custom `role` and `name` fields
+* `session` — active sessions
+* `account` — OAuth/social accounts
+* `verification` — email verification tokens
+
+On user creation:
+
+1. User signs up via Better Auth
+2. `role` defaults to `"client"` 
+3. If email is in `ADMIN_EMAILS` list (see `src/lib/constants.ts`), role is set to `"admin"`
+4. Admin can update role later via database
 
 ---
 
-## Quality Standard
+# Security Rules
 
-The dashboard should look like a premium SaaS product built by a funded startup.
+Never trust client-side role checks.
 
-Every screen should be production-ready, scalable, reusable, and visually polished.
+Always validate:
+
+* Authentication
+* Authorization
+* Ownership
+
+on the server.
+
+Security must take priority over convenience.
+
+---
+
+# Final Goal
+
+The platform must behave like an enterprise SaaS application where every user only sees data and functionality permitted by their assigned role.
+
+Admin = Full Control
+
+Team = Operational Access
+
+Client = Limited Access
+
+

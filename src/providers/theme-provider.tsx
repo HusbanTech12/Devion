@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react"
 
 type Theme = "light" | "dark" | "system"
 
@@ -22,38 +22,45 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
+function getInitialTheme(storageKey: string, defaultTheme: Theme): Theme {
+  if (typeof window === "undefined") return defaultTheme
+  const stored = localStorage.getItem(storageKey) as Theme | null
+  return stored ?? defaultTheme
+}
+
 export function ThemeProvider({
   children,
   defaultTheme = "system",
   storageKey = "devion-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(defaultTheme)
+  const [theme, setThemeState] = useState<Theme>(() => getInitialTheme(storageKey, defaultTheme))
 
-  useEffect(() => {
-    const stored = localStorage.getItem(storageKey) as Theme | null
-    if (stored) setTheme(stored)
-  }, [storageKey])
-
-  useEffect(() => {
+  const applyTheme = useCallback((newTheme: Theme) => {
     const root = document.documentElement
     root.classList.remove("light", "dark")
-
-    if (theme === "system") {
+    if (newTheme === "system") {
       const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches
       root.classList.add(systemDark ? "dark" : "light")
     } else {
-      root.classList.add(theme)
+      root.classList.add(newTheme)
     }
-  }, [theme])
+  }, [])
 
-  const value = {
-    theme,
-    setTheme: (newTheme: Theme) => {
+  const setTheme = useCallback(
+    (newTheme: Theme) => {
       localStorage.setItem(storageKey, newTheme)
-      setTheme(newTheme)
+      setThemeState(newTheme)
+      applyTheme(newTheme)
     },
-  }
+    [storageKey, applyTheme]
+  )
+
+  useEffect(() => {
+    applyTheme(theme)
+  }, [theme, applyTheme])
+
+  const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme])
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
