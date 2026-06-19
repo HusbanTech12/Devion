@@ -37,7 +37,7 @@ export function Footer() {
         <div className="grid gap-10 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <Link href="/" className="group inline-flex items-center mb-4">
-              <Image src="/images/logo-light.svg" alt="Devion" width={160} height={48} className="h-10 w-auto" priority unoptimized />
+              <Image src="/images/logo-dark.svg" alt="Devion" width={160} height={48} className="h-10 w-auto" priority unoptimized />
             </Link>
             <p className="text-sm text-muted-foreground max-w-sm mb-6 leading-relaxed">
               Premium AI-powered development platform. Build intelligent systems

@@ -324,3 +324,201 @@ npm run dev
 | **🟡 Growth** | $1,500 – $3,000 | Fullstack web app, admin dashboard, AI integration, analytics dashboard | Growing businesses |
 | **🔴 Premium** | $3,000 – $8,000+ | Advanced AI systems, custom dashboards, scalable architecture, premium UI systems, analytics platform, premium support | Serious businesses & startups |
 | **🎬 Video Editing** | $200 – $500 | Marketing videos, motion graphics, post-production, brand storytelling, social media content | Content creators & brands |
+
+# Dashboard System Requirements (CRITICAL)
+
+## Dashboard Philosophy
+
+The dashboard must NOT feel like a traditional admin panel.
+
+The dashboard should feel like a premium SaaS operating system inspired by:
+
+* Linear
+* Stripe
+* Vercel
+* Notion
+* Raycast
+* Arc Browser
+
+Every dashboard page should communicate:
+
+* Speed
+* Trust
+* Intelligence
+* Simplicity
+* Premium quality
+
+---
+
+## Dashboard Layout
+
+Required layout:
+
+* Collapsible Sidebar
+* Sticky Header
+* Global Search
+* Command Palette (Ctrl/Cmd + K)
+* Notification Center
+* User Menu
+* Theme Switcher
+* Responsive Mobile Navigation
+
+The dashboard shell must be reusable across all dashboard routes.
+
+---
+
+## Dashboard Navigation
+
+Required modules:
+
+* Overview
+* Projects
+* Clients
+* CRM
+* Analytics
+* AI Assistant
+* Documents
+* Activity
+* Team
+* Settings
+
+Future-ready modules:
+
+* Billing
+* Automations
+* Infrastructure
+* Integrations
+
+---
+
+## Dashboard Overview
+
+The dashboard home page should contain:
+
+* Welcome section
+* Revenue metrics
+* Active projects
+* Client statistics
+* Team productivity
+* AI insights
+* Recent activity feed
+* Upcoming deadlines
+* Quick actions
+
+The overview page should provide a complete business snapshot.
+
+---
+
+## Projects Module
+
+Required features:
+
+* Kanban View
+* List View
+* Status Tracking
+* Priority System
+* Milestones
+* Deadlines
+* Team Assignment
+* Progress Indicators
+
+---
+
+## Clients Module
+
+Required features:
+
+* Client Directory
+* Client Profiles
+* Contact Information
+* Active Projects
+* Notes
+* Activity History
+
+---
+
+## CRM Module
+
+Required features:
+
+* Lead Management
+* Sales Pipeline
+* Opportunity Tracking
+* Meeting Tracking
+* Activity Logging
+
+---
+
+## Analytics Module
+
+Required features:
+
+* Revenue Analytics
+* Project Analytics
+* Client Growth Analytics
+* Team Performance Analytics
+
+Charts must use Recharts.
+
+---
+
+## AI Assistant Module
+
+Required features:
+
+* Chat Interface
+* Proposal Generator
+* Content Generator
+* Business Insights
+* AI Recommendations
+
+The AI assistant should feel like an integrated workspace rather than a chatbot page.
+
+---
+
+## Design Standards
+
+All dashboard pages must:
+
+* Use shadcn/ui
+* Use Framer Motion
+* Follow consistent spacing
+* Use responsive layouts
+* Support dark mode
+* Support loading states
+* Support empty states
+* Support error states
+
+Avoid:
+
+* Generic templates
+* Bootstrap-style dashboards
+* Crowded layouts
+* Excessive colors
+
+---
+
+## UI Components
+
+Required reusable components:
+
+* Metric Cards
+* Data Tables
+* Empty States
+* Loading Skeletons
+* Charts
+* Activity Timeline
+* Status Badges
+* Search Inputs
+* Filters
+* Dialogs
+* Drawers
+* Toast Notifications
+
+---
+
+## Quality Standard
+
+The dashboard should look like a premium SaaS product built by a funded startup.
+
+Every screen should be production-ready, scalable, reusable, and visually polished.

@@ -25,7 +25,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-primary/10 bg-background/70 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/40">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center">
-          <Image src="/images/logo-light.svg" alt="Devion" width={200} height={60} className="h-[60px] w-auto" priority unoptimized />
+          <Image src="/images/logo-dark.svg" alt="Devion" width={200} height={60} className="h-[60px] w-auto" priority unoptimized />
         </Link>
 
         <nav className="hidden md:flex items-center gap-1 rounded-2xl bg-muted/50 px-2 py-1 ring-1 ring-primary/5">
