@@ -104,7 +104,7 @@ export default function ServicesPage() {
       <Navbar />
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative overflow-hidden border-b bg-gradient-to-b from-muted/50 to-background py-24 md:py-32">
+        <section className="relative overflow-hidden bg-gradient-to-b from-muted/50 to-background py-24 md:py-32">
           <div className="container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -167,7 +167,7 @@ export default function ServicesPage() {
         </section>
 
         {/* Process */}
-        <section className="border-y bg-muted/30 py-20 md:py-28">
+        <section className="bg-muted/30 py-20 md:py-28">
           <div className="container">
             <motion.div {...fadeIn} className="mx-auto max-w-3xl text-center">
               <Badge variant="secondary" className="mb-4 px-3 py-1 tracking-wide">Process</Badge>

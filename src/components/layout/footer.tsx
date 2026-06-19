@@ -1,5 +1,6 @@
+import Image from "next/image"
 import Link from "next/link"
-import { Sparkles, Globe, AtSign, UsersRound, ChevronRight } from "lucide-react"
+import { Globe, AtSign, UsersRound, ChevronRight } from "lucide-react"
 
 const footerLinks = {
   Company: [
@@ -35,13 +36,8 @@ export function Footer() {
       <div className="container relative pt-16 pb-8">
         <div className="grid gap-10 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <Link href="/" className="group inline-flex items-center gap-2.5 mb-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/60 shadow-lg shadow-primary/25">
-                <Sparkles className="h-4 w-4 text-white" />
-              </div>
-              <span className="text-lg font-bold tracking-tight">
-                Devi<span className="text-primary">on</span>
-              </span>
+            <Link href="/" className="group inline-flex items-center mb-4">
+              <Image src="/images/logo-light.svg" alt="Devion" width={160} height={48} className="h-10 w-auto" priority unoptimized />
             </Link>
             <p className="text-sm text-muted-foreground max-w-sm mb-6 leading-relaxed">
               Premium AI-powered development platform. Build intelligent systems

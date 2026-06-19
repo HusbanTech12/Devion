@@ -47,26 +47,26 @@ export default function ContactPage() {
       <Navbar />
       <main className="flex-1">
         {/* Contact Form + Info */}
-        <section className="py-20 md:py-28">
+        <section className="py-16 md:py-24">
           <div className="container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mx-auto max-w-3xl text-center mb-12"
+              className="mx-auto max-w-3xl text-center mb-6"
             >
-              <Badge className="mb-4 px-3 py-1">Contact</Badge>
-              <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-                Get in touch
+              <Badge className="mb-3 px-3 py-1">Contact</Badge>
+              <h1 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
+                Let&apos;s Talk
               </h1>
             </motion.div>
-            <div className="grid gap-12 lg:grid-cols-5 mx-auto max-w-5xl">
+            <div className="grid gap-6 lg:grid-cols-5 mx-auto max-w-5xl">
               {/* Info */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 className="lg:col-span-2 space-y-6"
               >
-                <h2 className="text-2xl font-bold">Get in touch</h2>
+                <h2 className="text-2xl font-bold">Contact us</h2>
                 <p className="text-muted-foreground">
                   Whether you have a question about our services, pricing, or
                   anything else — our team is ready to help.

@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   title: "Devion — AI-Powered Solutions",
   description:
     "We build cutting-edge AI-powered solutions that transform your business. From intelligent automation to predictive analytics.",
+  icons: {
+    icon: "/images/favicon.svg",
+    apple: "/images/favicon.svg",
+  },
 }
 
 export default function RootLayout({

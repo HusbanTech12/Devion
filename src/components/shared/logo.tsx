@@ -5,22 +5,31 @@ import { cn } from "@/src/lib/utils"
 interface LogoProps {
   className?: string
   showText?: boolean
+  size?: "sm" | "md" | "lg"
 }
 
-export function Logo({ className, showText = true }: LogoProps) {
+export function Logo({ className, showText = true, size = "md" }: LogoProps) {
+  const iconSizes = { sm: 24, md: 32, lg: 40 }
+  const textSizes = { sm: "text-base", md: "text-lg", lg: "text-xl" }
+  const iconSize = iconSizes[size]
+
   return (
-    <Link href="/" className={cn("flex items-center gap-3", className)}>
+    <Link href="/" className={cn("flex items-center gap-2.5", className)}>
       <Image
-        src="/images/Devion Logo.svg"
-        alt="Devion Logo"
-        width={160}
-        height={50}
-        className="h-10 w-auto"
+        src="/images/icon.svg"
+        alt="Devion"
+        width={iconSize}
+        height={iconSize}
+        className="flex-shrink-0"
         priority
         unoptimized
       />
       {showText && (
-        <span className="font-bold text-lg hidden sm:inline">Devion</span>
+        <span className={cn("font-bold tracking-tight", textSizes[size])}>
+          <span className="text-foreground">De</span>
+          <span className="text-[#4F7CFF]">v</span>
+          <span className="text-foreground">ion</span>
+        </span>
       )}
     </Link>
   )

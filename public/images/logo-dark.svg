@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150" width="500" height="150">
+  <defs>
+    <style>
+      .wordmark { font-family: 'Inter Display', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 72px; font-weight: 700; fill: #FFFFFF; }
+      .tagline { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 11px; font-weight: 400; fill: rgba(255,255,255,0.5); letter-spacing: 3.5px; text-transform: uppercase; }
+    </style>
+  </defs>
+  <!-- Wordmark -->
+  <text x="130" y="95" class="wordmark">De</text>
+  <!-- Custom V icon -->
+  <g transform="translate(219, 0)">
+    <path d="M 2,22 L 22,72 L 44,17" stroke="#4F7CFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  </g>
+  <text x="273" y="95" class="wordmark">ion</text>
+  <!-- Tagline -->
+  <text x="250" y="128" class="tagline" text-anchor="middle">Powering Digital Excellence</text>
+</svg>

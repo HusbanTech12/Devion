@@ -57,21 +57,21 @@ export default function PricingPage() {
       <Navbar />
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative overflow-hidden border-b bg-gradient-to-b from-muted/50 to-background py-24 md:py-32">
+        <section className="relative overflow-hidden bg-gradient-to-b from-muted/50 to-background py-16 md:py-24">
           <div className="container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="mx-auto max-w-3xl text-center"
             >
-              <Badge className="mb-4 px-3 py-1">Pricing</Badge>
-              <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
+              <Badge className="mb-3 px-3 py-1">Pricing</Badge>
+              <h1 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
                 Investment that{" "}
                 <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
                   pays for itself
                 </span>
               </h1>
-              <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
+              <p className="mt-4 text-base text-muted-foreground max-w-2xl mx-auto">
                 Fixed-price packages with no hidden fees. Pick the tier that fits
                 your goals and budget.
               </p>
@@ -80,7 +80,7 @@ export default function PricingPage() {
         </section>
 
         {/* Plans */}
-        <section className="py-20 md:py-28">
+        <section className="py-16 md:py-24">
           <div className="container">
             <div className="grid gap-8 lg:grid-cols-3 mx-auto max-w-5xl items-start">
               {plans.map((plan, i) => (
@@ -163,7 +163,7 @@ export default function PricingPage() {
         </section>
 
         {/* CTA */}
-        <section className="border-t bg-muted/30 py-20 md:py-28">
+        <section className="bg-muted/30 py-16 md:py-24">
           <div className="container max-w-3xl text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}

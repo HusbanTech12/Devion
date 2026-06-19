@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devion Logo Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #111; display: flex; flex-direction: column; align-items: center; padding: 60px 24px; }
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .subtitle { font-size: 14px; color: #666; margin-bottom: 48px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 32px; width: 100%; max-width: 960px; }
+  .card { background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04); padding: 32px; }
+  .card h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #444; }
+  .card h2 span { font-weight: 400; color: #999; font-size: 13px; }
+  .preview { display: flex; align-items: center; justify-content: center; min-height: 120px; border-radius: 8px; overflow: hidden; }
+  .preview img { max-width: 100%; height: auto; }
+  .label { display: inline-block; font-size: 11px; font-weight: 500; color: #888; letter-spacing: 0.5px; margin-top: 12px; }
+  .inline-group { display: flex; gap: 16px; flex-wrap: wrap; }
+  .inline-group .preview { flex: 1; min-width: 180px; }
+  .specs { margin-top: 48px; max-width: 600px; text-align: center; }
+  .specs h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+  .specs p { font-size: 13px; color: #666; line-height: 1.6; }
+  .specs code { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+  .badge { display: inline-block; background: #4F7CFF; color: white; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.3px; margin-left: 6px; vertical-align: middle; }
+</style>
+</head>
+<body>
+  <h1>Devion Brand Logo System</h1>
+  <p class="subtitle">Premium • Minimal • Iconic</p>
+
+  <div class="grid">
+    <!-- Full Logo - Dark Mode -->
+    <div class="card">
+      <h2>Full Logo <span>— Dark Mode</span></h2>
+      <div class="preview" style="background:#0A0A0A; padding:20px;">
+        <img src="/images/logo-dark.svg" alt="Devion Dark Logo">
+      </div>
+      <div class="label">logo-dark.svg <span class="badge">Primary</span></div>
+    </div>
+
+    <!-- Full Logo - Light Mode -->
+    <div class="card">
+      <h2>Full Logo <span>— Light Mode</span></h2>
+      <div class="preview" style="background:#FFFFFF; padding:20px; border:1px solid #eee;">
+        <img src="/images/logo-light.svg" alt="Devion Light Logo">
+      </div>
+      <div class="label">logo-light.svg</div>
+    </div>
+
+    <!-- Wordmark - Dark Mode -->
+    <div class="card">
+      <h2>Wordmark <span>— Dark Mode</span></h2>
+      <div class="preview" style="background:#0A0A0A; padding:20px;">
+        <img src="/images/wordmark-dark.svg" alt="Devion Wordmark Dark">
+      </div>
+      <div class="label">wordmark-dark.svg</div>
+    </div>
+
+    <!-- Wordmark - Light Mode -->
+    <div class="card">
+      <h2>Wordmark <span>— Light Mode</span></h2>
+      <div class="preview" style="background:#FFFFFF; padding:20px; border:1px solid #eee;">
+        <img src="/images/wordmark-light.svg" alt="Devion Wordmark Light">
+      </div>
+      <div class="label">wordmark-light.svg</div>
+    </div>
+
+    <!-- Icon Only -->
+    <div class="card">
+      <h2>Brand Icon <span>— V Symbol</span></h2>
+      <div class="preview" style="background:#0A0A0A; padding:24px;">
+        <img src="/images/icon.svg" alt="Devion Icon" style="width:80px;">
+      </div>
+      <div class="label">icon.svg</div>
+    </div>
+
+    <!-- Favicon -->
+    <div class="card">
+      <h2>Favicon <span>— App Icon</span></h2>
+      <div class="preview" style="background:#0A0A0A; padding:24px; gap:24px; display:flex;">
+        <img src="/images/favicon.svg" alt="Devion Favicon" style="width:64px;">
+        <img src="/images/favicon.svg" alt="Devion Favicon" style="width:32px;">
+        <img src="/images/favicon.svg" alt="Devion Favicon" style="width:16px;">
+      </div>
+      <div class="label">favicon.svg</div>
+    </div>
+  </div>
+
+  <!-- Brand Specs -->
+  <div class="specs">
+    <h3>Brand Specifications</h3>
+    <p>
+      <strong>Wordmark:</strong> Custom "De" + iconic "V" + "ion" — the V doubles as the brand symbol.<br>
+      <strong>Custom V:</strong> Asymmetric forward-leaning chevron — right arm extends higher, symbolizing growth &amp; innovation.<br>
+      <strong>Colors:</strong> <span style="color:#0A0A0A;font-weight:600;">Deep Black #0A0A0A</span> ·
+      <span style="color:#4F7CFF;font-weight:600;">Electric Blue #4F7CFF</span> ·
+      <span style="color:#FFFFFF;">Pure White #FFFFFF</span><br>
+      <strong>Typography:</strong> Inter Display / Inter — geometric sans-serif, 72px Bold wordmark, 11px Uppercase tagline with 3.5px letter-spacing.<br>
+      <strong>Tagline:</strong> <em>"Powering Digital Excellence"</em> — centered, subtle, professional.<br>
+      <strong>Files:</strong> <code>logo-dark.svg</code> <code>logo-light.svg</code> <code>wordmark-dark.svg</code> <code>wordmark-light.svg</code> <code>icon.svg</code> <code>favicon.svg</code>
+    </p>
+  </div>
+</body>
+</html>

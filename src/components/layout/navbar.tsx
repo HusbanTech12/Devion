@@ -4,7 +4,8 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Sparkles, ChevronRight } from "lucide-react"
+import Image from "next/image"
+import { Menu, X, ChevronRight } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
 import { cn } from "@/src/lib/utils"
 
@@ -23,13 +24,8 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-primary/10 bg-background/70 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/40">
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="group flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/60 shadow-lg shadow-primary/25">
-            <Sparkles className="h-4 w-4 text-white" />
-          </div>
-          <span className="text-lg font-bold tracking-tight">
-            Devi<span className="text-primary">on</span>
-          </span>
+        <Link href="/" className="flex items-center">
+          <Image src="/images/logo-light.svg" alt="Devion" width={200} height={60} className="h-[60px] w-auto" priority unoptimized />
         </Link>
 
         <nav className="hidden md:flex items-center gap-1 rounded-2xl bg-muted/50 px-2 py-1 ring-1 ring-primary/5">
