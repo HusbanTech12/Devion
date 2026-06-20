@@ -3,7 +3,6 @@
 import { motion } from "framer-motion"
 import { CheckCircle, Sparkles, Target, Users } from "lucide-react"
 import Image from "next/image"
-import { Navbar } from "@/src/components/layout/navbar"
 import { Footer } from "@/src/components/layout/footer"
 import { Badge } from "@/src/components/ui/badge"
 import { Card, CardContent } from "@/src/components/ui/card"
@@ -47,7 +46,6 @@ const team = [
 export default function AboutPage() {
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
       <main className="flex-1">
         {/* Hero */}
         <section className="relative overflow-hidden py-24 md:py-32">

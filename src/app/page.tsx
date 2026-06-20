@@ -22,7 +22,6 @@ import {
 import { Button } from "@/src/components/ui/button"
 import { Card, CardContent } from "@/src/components/ui/card"
 import { Badge } from "@/src/components/ui/badge"
-import { Navbar } from "@/src/components/layout/navbar"
 import { Footer } from "@/src/components/layout/footer"
 
 function Section({ children, className, ...props }: { children: React.ReactNode; className?: string; id?: string }) {
@@ -238,7 +237,6 @@ const fadeUp = (delay = 0) => ({
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
       <main className="flex-1">
         {/* ─── HERO ─── */}
         <section className="relative min-h-[90vh] flex items-center overflow-hidden">

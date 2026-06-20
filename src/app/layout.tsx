@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
+import { Navbar } from "@/src/components/layout/navbar"
 import { ThemeProvider } from "@/src/providers/theme-provider"
 import "./globals.css"
 
@@ -34,6 +35,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background font-sans antialiased`}
       >
         <ThemeProvider defaultTheme="dark" storageKey="devion-theme">
+          <Navbar />
           {children}
         </ThemeProvider>
       </body>

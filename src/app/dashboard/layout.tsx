@@ -42,6 +42,8 @@ export default async function DashboardLayout({
     .executeTakeFirst()
 
   const role = dbUser?.role ?? betterUser.role ?? "client"
+  if (role !== "admin") redirect("/")
+
   const userName = dbUser?.name ?? betterUser.name ?? null
   const userEmail = dbUser?.email ?? betterUser.email ?? ""
 

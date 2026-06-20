@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { X } from "lucide-react"
+import { X, Globe } from "lucide-react"
 import {
   LayoutDashboard,
   FolderKanban,
@@ -21,6 +21,7 @@ import {
 import { cn } from "@/src/lib/utils"
 import { Button } from "@/src/components/ui/button"
 import { Sheet, SheetContent } from "@/src/components/ui/sheet"
+import { Separator } from "@/src/components/ui/separator"
 import type { UserRole } from "@/src/types"
 
 type NavItem = {
@@ -72,6 +73,75 @@ export function MobileSidebar({
           </Button>
         </div>
         <nav className="space-y-1 p-4">
+          <div className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <Globe className="h-3 w-3" />
+            Website
+          </div>
+          <Link
+            href="/"
+            onClick={onClose}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+              pathname === "/"
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            )}
+          >
+            Home
+          </Link>
+          <Link
+            href="/about"
+            onClick={onClose}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+              pathname === "/about"
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            )}
+          >
+            About
+          </Link>
+          <Link
+            href="/services"
+            onClick={onClose}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+              pathname === "/services"
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            )}
+          >
+            Services
+          </Link>
+          <Link
+            href="/pricing"
+            onClick={onClose}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+              pathname === "/pricing"
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            )}
+          >
+            Pricing
+          </Link>
+          <Link
+            href="/contact"
+            onClick={onClose}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+              pathname === "/contact"
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            )}
+          >
+            Contact
+          </Link>
+          <Separator className="my-3" />
+          <div className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <LayoutDashboard className="h-3 w-3" />
+            Dashboard
+          </div>
           {items.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.href || pathname.startsWith(item.href + "/")

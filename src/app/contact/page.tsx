@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { Mail, MapPin, Phone, Send } from "lucide-react"
-import { Navbar } from "@/src/components/layout/navbar"
 import { Footer } from "@/src/components/layout/footer"
 import { Badge } from "@/src/components/ui/badge"
 import { Button } from "@/src/components/ui/button"
@@ -44,7 +43,6 @@ export default function ContactPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
       <main className="flex-1">
         {/* Contact Form + Info */}
         <section className="py-16 md:py-24">

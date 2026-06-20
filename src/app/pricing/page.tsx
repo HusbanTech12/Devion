@@ -3,7 +3,6 @@
 import { motion } from "framer-motion"
 import { Check, ArrowRight, Sparkles } from "lucide-react"
 import Link from "next/link"
-import { Navbar } from "@/src/components/layout/navbar"
 import { Footer } from "@/src/components/layout/footer"
 import { Badge } from "@/src/components/ui/badge"
 import { Button } from "@/src/components/ui/button"
@@ -54,7 +53,6 @@ const plans = [
 export default function PricingPage() {
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
       <main className="flex-1">
         {/* Hero */}
         <section className="relative overflow-hidden bg-gradient-to-b from-muted/50 to-background py-16 md:py-24">

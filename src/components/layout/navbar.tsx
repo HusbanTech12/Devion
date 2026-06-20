@@ -1,15 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
-import { Menu, X, ChevronRight } from "lucide-react"
+import { Menu, X, ChevronRight, LayoutDashboard } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
 import { cn } from "@/src/lib/utils"
+import { useSession } from "@/src/lib/auth-client"
 
-const links = [
+const baseLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
@@ -20,6 +21,17 @@ const links = [
 export function Navbar() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
+  const { data: session } = useSession()
+  const role = (session?.user as { role?: string } | undefined)?.role
+  const isAdmin = role === "admin"
+
+  const links = useMemo(
+    () =>
+      isAdmin
+        ? [...baseLinks, { href: "/dashboard", label: "Dashboard" }]
+        : baseLinks,
+    [isAdmin]
+  )
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-primary/10 bg-background/70 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/40">
@@ -30,7 +42,7 @@ export function Navbar() {
 
         <nav className="hidden md:flex items-center gap-1 rounded-2xl bg-muted/50 px-2 py-1 ring-1 ring-primary/5">
           {links.map((link) => {
-            const isActive = pathname === link.href
+            const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
             return (
               <Link
                 key={link.href}
@@ -49,7 +61,10 @@ export function Navbar() {
                     transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                   />
                 )}
-                <span className="relative z-10">{link.label}</span>
+                <span className="relative z-10 flex items-center gap-1.5">
+                  {link.href === "/dashboard" && <LayoutDashboard className="h-3.5 w-3.5" />}
+                  {link.label}
+                </span>
               </Link>
             )
           })}
@@ -102,6 +117,7 @@ export function Navbar() {
                   {pathname === link.href && (
                     <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
                   )}
+                  {link.href === "/dashboard" && <LayoutDashboard className="h-3.5 w-3.5" />}
                   {link.label}
                 </Link>
               ))}
