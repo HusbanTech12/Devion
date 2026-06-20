@@ -355,6 +355,14 @@ export default function Home() {
                 <FeatureCard key={feature.title} feature={feature} i={i} />
               ))}
             </div>
+            <motion.div {...fadeUp(6)} className="mt-12 text-center">
+              <Button size="lg" variant="outline" className="h-12 px-8 text-base" asChild>
+                <Link href="/services">
+                  View All Services
+                  <ChevronRight className="ml-1.5 h-4 w-4" />
+                </Link>
+              </Button>
+            </motion.div>
           </div>
         </Section>
 
@@ -407,6 +415,14 @@ export default function Home() {
                 </motion.div>
               ))}
             </div>
+            <motion.div {...fadeUp(4)} className="mt-12 text-center">
+              <Button size="lg" variant="default" className="h-12 px-8 text-base shadow-lg shadow-primary/25" asChild>
+                <Link href="/pricing">
+                  View Pricing
+                  <ChevronRight className="ml-1.5 h-4 w-4" />
+                </Link>
+              </Button>
+            </motion.div>
           </div>
         </Section>
 
