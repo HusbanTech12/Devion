@@ -102,16 +102,16 @@ export function Navbar() {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0 ring-1 ring-primary/10 hover:ring-primary/30 transition-all">
+                  <button className="relative h-9 w-9 rounded-full p-0 ring-1 ring-primary/10 hover:ring-primary/30 transition-all cursor-pointer">
                     <Avatar className="h-9 w-9">
                       <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? ""} />
                       <AvatarFallback className="bg-primary/10 text-primary text-xs font-medium">
                         {initials}
                       </AvatarFallback>
                     </Avatar>
-                  </Button>
+                  </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-64" align="end" sideOffset={12}>
+                <DropdownMenuContent className="w-64" align="end" side="bottom" sideOffset={12}>
                   <DropdownMenuLabel className="p-0">
                     <div className="flex items-center gap-3 px-2 py-3">
                       <Avatar className="h-10 w-10">
