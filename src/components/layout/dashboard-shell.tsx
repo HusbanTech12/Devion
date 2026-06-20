@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Sidebar } from "@/src/components/layout/sidebar"
 import { DashboardHeader } from "@/src/components/layout/dashboard-header"
 import { MobileSidebar } from "@/src/components/layout/mobile-sidebar"
+import { RouteGuard } from "@/src/components/layout/route-guard-client"
 import type { UserRole } from "@/src/types"
 
 export function DashboardShell({
@@ -35,7 +36,9 @@ export function DashboardShell({
           userRole={role}
         />
         <main className="flex-1 overflow-y-auto p-6 lg:p-8">
-          {children}
+          <RouteGuard role={role}>
+            {children}
+          </RouteGuard>
         </main>
       </div>
     </div>

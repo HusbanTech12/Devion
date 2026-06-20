@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import {
@@ -33,7 +33,6 @@ const baseLinks = [
 export function Navbar() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
-  const router = useRouter()
   const { data: session } = useSession()
   const user = session?.user
   const role = (user as { role?: string } | undefined)?.role
@@ -91,7 +90,7 @@ export function Navbar() {
           })}
         </nav>
 
-        <div className="hidden md:flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2 ml-auto">
           {user ? (
             <>
               <Button variant="ghost" size="icon" className="shrink-0 rounded-xl">
@@ -187,7 +186,7 @@ export function Navbar() {
                     className="text-destructive focus:text-destructive flex items-center gap-2 cursor-pointer"
                     onClick={async () => {
                       await signOut()
-                      router.push("/")
+                      window.location.href = "/"
                     }}
                   >
                     <LogOut className="h-4 w-4" />
@@ -304,7 +303,7 @@ export function Navbar() {
                   <Button
                     variant="ghost"
                     className="w-full rounded-xl mt-2 text-destructive"
-                    onClick={() => { setOpen(false); signOut(); router.push("/") }}
+                    onClick={async () => { setOpen(false); await signOut(); window.location.href = "/" }}
                   >
                     <LogOut className="h-4 w-4 mr-2" />
                     Sign Out

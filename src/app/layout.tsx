@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Navbar } from "@/src/components/layout/navbar"
 import { ThemeProvider } from "@/src/providers/theme-provider"
+import { Toaster } from "@/src/components/shared/toaster"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -37,6 +38,7 @@ export default function RootLayout({
         <ThemeProvider defaultTheme="dark" storageKey="devion-theme">
           <Navbar />
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

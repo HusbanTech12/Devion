@@ -1,4 +1,5 @@
 export const ADMIN_EMAILS = ["husbantech08@gmail.com"]
+export const TEAM_EMAILS = ["husbanattari38@gmail.com"]
 
 export const APP_NAME = "Devion"
 export const APP_DESCRIPTION = "AI-Powered Development Platform"

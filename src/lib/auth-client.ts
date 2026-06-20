@@ -11,7 +11,10 @@ export const { signIn, signUp, signOut } = authClient
 
 export function useSession() {
   const [state, setState] = useState<{
-    data: { user: { id: string; email: string; name?: string; image?: string; role?: string }; session: unknown } | null
+    data: {
+      user: { id: string; email: string; name?: string; image?: string; role?: string }
+      session: unknown
+    } | null
     isPending: boolean
   }>({ data: null, isPending: true })
 
@@ -19,15 +22,23 @@ export function useSession() {
     let cancelled = false
     async function fetchSession() {
       try {
-        const res = await fetch("/api/auth/get-session", { credentials: "include" })
+        const { data, error } = await authClient.getSession()
         if (cancelled) return
-        const json = await res.json()
-        if (!cancelled) {
-          setState({
-            data: json?.user ? { user: json.user, session: json.session } : null,
-            isPending: false,
-          })
+        if (error || !data?.user) {
+          setState({ data: null, isPending: false })
+          return
         }
+        const user = data.user as any
+        setState({
+          data: {
+            user: {
+              ...user,
+              image: user.image ?? gravatarUrl(user.email),
+            },
+            session: data.session,
+          },
+          isPending: false,
+        })
       } catch {
         if (!cancelled) {
           setState({ data: null, isPending: false })
@@ -40,3 +51,9 @@ export function useSession() {
 
   return state
 }
+
+export function gravatarUrl(email: string, size = 200): string {
+  const seed = encodeURIComponent(email.trim().toLowerCase())
+  return `https://api.dicebear.com/7.x/initials/svg?seed=${seed}&scale=80&backgroundColor=6366f1&radius=50`
+}
+

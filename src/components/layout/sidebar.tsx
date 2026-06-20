@@ -43,6 +43,7 @@ const allNavItems: NavItem[] = [
   { href: "/dashboard/messages", label: "Messages", icon: MessageSquare, roles: ["admin", "client"] },
   { href: "/dashboard/documents", label: "Documents", icon: FileText, roles: ["team"] },
   { href: "/dashboard/settings", label: "Settings", icon: Settings, roles: ["admin"] },
+  { href: "/dashboard/settings/users", label: "Users", icon: UserPlus, roles: ["admin"] },
 ]
 
 function getNavSections(role: UserRole) {
@@ -53,7 +54,7 @@ function getNavSections(role: UserRole) {
   const mainItems = items.filter((i) => !["/dashboard/settings", "/dashboard/billing", "/dashboard/team", "/dashboard/documents"].includes(i.href))
   if (mainItems.length > 0) sections.push({ items: mainItems })
 
-  const extraItems = items.filter((i) => ["/dashboard/team", "/dashboard/documents", "/dashboard/billing", "/dashboard/settings"].includes(i.href))
+  const extraItems = items.filter((i) => ["/dashboard/team", "/dashboard/documents", "/dashboard/billing", "/dashboard/settings", "/dashboard/settings/users"].includes(i.href))
   if (extraItems.length > 0) sections.push({ title: "Administration", items: extraItems })
 
   return sections

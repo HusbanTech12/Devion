@@ -1,15 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { toast } from "sonner"
 import { authClient } from "@/src/lib/auth-client"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
 
 export default function SignInPage() {
-  const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -25,7 +24,16 @@ export default function SignInPage() {
       setLoading(false)
       return
     }
-    router.push("/dashboard")
+    toast.success("Login Successful", { description: "Welcome back to Devion" })
+    const res = await fetch("/api/auth/sync-user", { method: "POST" })
+    const json = await res.json()
+    setTimeout(() => {
+      if (json.success) {
+        window.location.href = json.data.role === "admin" ? "/dashboard" : "/"
+      } else {
+        window.location.href = "/"
+      }
+    }, 600)
   }
 
   return (

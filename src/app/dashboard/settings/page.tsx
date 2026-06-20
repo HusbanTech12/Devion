@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { motion } from "framer-motion"
 import { PageHeader } from "@/src/components/shared/page-header"
 import { Button } from "@/src/components/ui/button"
@@ -72,14 +73,16 @@ export default function SettingsPage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="team" className="mt-4">
+        <TabsContent value="team" className="mt-4 space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Team Settings</CardTitle>
-              <CardDescription>Manage team permissions and roles.</CardDescription>
+              <CardTitle>User Management</CardTitle>
+              <CardDescription>View and manage all platform users, change roles and permissions.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Team management settings available here.</p>
+              <Button asChild>
+                <Link href="/dashboard/settings/users">Manage Users</Link>
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>

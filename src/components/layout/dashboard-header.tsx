@@ -2,13 +2,13 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import Image from "next/image"
 import { Menu, Search, Bell, Sun, Moon, Command } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Button } from "@/src/components/ui/button"
 import { authClient } from "@/src/lib/auth-client"
-import { Avatar, AvatarFallback } from "@/src/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +26,7 @@ import {
   CommandList,
 } from "@/src/components/ui/command"
 import { cn } from "@/src/lib/utils"
+import { gravatarUrl } from "@/src/lib/auth-client"
 import type { UserRole } from "@/src/types"
 
 type Props = {
@@ -74,7 +75,6 @@ const searchItems: Record<string, { href: string; label: string }[]> = {
 
 export function DashboardHeader({ onMenuClick, userName, userEmail, userRole }: Props) {
   const pathname = usePathname()
-  const router = useRouter()
   const { theme, setTheme } = useTheme()
   const [commandOpen, setCommandOpen] = useState(false)
 
@@ -145,6 +145,7 @@ export function DashboardHeader({ onMenuClick, userName, userEmail, userRole }: 
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
+                  <AvatarImage src={gravatarUrl(userEmail)} alt={userName ?? ""} />
                   <AvatarFallback className="bg-primary/10 text-primary text-xs">
                     {initials}
                   </AvatarFallback>
@@ -173,7 +174,7 @@ export function DashboardHeader({ onMenuClick, userName, userEmail, userRole }: 
                 className="text-destructive"
                 onClick={async () => {
                   await authClient.signOut()
-                  router.push("/sign-in")
+                  window.location.href = "/sign-in"
                 }}
               >
                 Sign Out

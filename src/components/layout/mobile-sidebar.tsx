@@ -47,6 +47,7 @@ const allNavItems: NavItem[] = [
   { href: "/dashboard/messages", label: "Messages", icon: MessageSquare, roles: ["admin", "client"] },
   { href: "/dashboard/documents", label: "Documents", icon: FileText, roles: ["team"] },
   { href: "/dashboard/settings", label: "Settings", icon: Settings, roles: ["admin"] },
+  { href: "/dashboard/settings/users", label: "Users", icon: UserPlus, roles: ["admin"] },
 ]
 
 export function MobileSidebar({

@@ -2,8 +2,9 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { auth } from "@/src/lib/auth"
 import { db } from "@/src/lib/db"
-import { ADMIN_EMAILS } from "@/src/lib/constants"
+import { ADMIN_EMAILS, TEAM_EMAILS } from "@/src/lib/constants"
 import { DashboardShell } from "@/src/components/layout/dashboard-shell"
+import type { UserRole } from "@/src/types"
 
 export default async function DashboardLayout({
   children,
@@ -15,15 +16,15 @@ export default async function DashboardLayout({
 
   const betterUser = session.user as { id: string; email: string; name?: string; role?: string }
 
-  const existing = await db
+  let dbUser = await db
     .selectFrom("users")
-    .select("id")
+    .selectAll()
     .where("id", "=", betterUser.id)
     .executeTakeFirst()
 
-  if (!existing) {
+  if (!dbUser) {
     const email = betterUser.email
-    const role = ADMIN_EMAILS.includes(email) ? "admin" : "client"
+    const role: UserRole = ADMIN_EMAILS.includes(email) ? "admin" : TEAM_EMAILS.includes(email) ? "team" : "client"
     await db
       .insertInto("users")
       .values({
@@ -33,22 +34,20 @@ export default async function DashboardLayout({
         role,
       })
       .execute()
+
+    dbUser = await db
+      .selectFrom("users")
+      .selectAll()
+      .where("id", "=", betterUser.id)
+      .executeTakeFirst()!
   }
 
-  const dbUser = await db
-    .selectFrom("users")
-    .selectAll()
-    .where("id", "=", betterUser.id)
-    .executeTakeFirst()
-
-  const role = dbUser?.role ?? betterUser.role ?? "client"
-  if (role !== "admin") redirect("/")
-
+  const role = (dbUser?.role ?? "client") as UserRole
   const userName = dbUser?.name ?? betterUser.name ?? null
   const userEmail = dbUser?.email ?? betterUser.email ?? ""
 
   return (
-    <DashboardShell role={role as any} userName={userName} userEmail={userEmail}>
+    <DashboardShell role={role} userName={userName} userEmail={userEmail}>
       {children}
     </DashboardShell>
   )
