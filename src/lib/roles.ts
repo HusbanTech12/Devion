@@ -1,36 +1,26 @@
-import { headers } from "next/headers"
-import { auth } from "@/src/lib/auth"
+import { auth } from "@clerk/nextjs/server"
 import { db } from "@/src/lib/db"
 import { ADMIN_EMAILS, TEAM_EMAILS } from "@/src/lib/constants"
 import type { UserRole } from "@/src/types"
 
-export async function getCurrentUserRole(): Promise<UserRole> {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) throw new Error("Unauthorized")
-
+async function getDbRole(userId: string): Promise<UserRole | null> {
   const dbUser = await db
     .selectFrom("users")
     .select("role")
-    .where("id", "=", session.user.id)
+    .where("id", "=", userId)
     .executeTakeFirst()
 
-  if (dbUser?.role) return dbUser.role as UserRole
+  return (dbUser?.role as UserRole) ?? null
+}
 
-  const email = session.user.email
-  const role: UserRole = ADMIN_EMAILS.includes(email) ? "admin" : TEAM_EMAILS.includes(email) ? "team" : "client"
+export async function getCurrentUserRole(): Promise<UserRole> {
+  const { userId } = await auth()
+  if (!userId) throw new Error("Unauthorized")
 
-  await db
-    .insertInto("users")
-    .values({
-      id: session.user.id,
-      email,
-      name: (session.user as any).name || null,
-      role,
-    })
-    .onConflict((oc) => oc.column("id").doUpdateSet({ role }))
-    .execute()
+  const dbRole = await getDbRole(userId)
+  if (dbRole) return dbRole
 
-  return role
+  return "client"
 }
 
 export async function isAdmin(): Promise<boolean> {

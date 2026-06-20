@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation"
 import Image from "next/image"
 import { Menu, Search, Bell, Sun, Moon, Command } from "lucide-react"
 import { useTheme } from "next-themes"
+import { useAuth } from "@clerk/nextjs"
 import { Button } from "@/src/components/ui/button"
-import { authClient } from "@/src/lib/auth-client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import {
   DropdownMenu,
@@ -76,6 +76,7 @@ const searchItems: Record<string, { href: string; label: string }[]> = {
 export function DashboardHeader({ onMenuClick, userName, userEmail, userRole }: Props) {
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
+  const { signOut } = useAuth()
   const [commandOpen, setCommandOpen] = useState(false)
 
   const initials = userName
@@ -172,10 +173,10 @@ export function DashboardHeader({ onMenuClick, userName, userEmail, userRole }: 
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="text-destructive"
-                onClick={async () => {
-                  await authClient.signOut()
-                  window.location.href = "/sign-in"
-                }}
+                  onClick={async () => {
+                    await signOut()
+                    window.location.href = "/sign-in"
+                  }}
               >
                 Sign Out
               </DropdownMenuItem>

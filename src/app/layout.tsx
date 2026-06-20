@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
+import { ClerkProvider } from "@clerk/nextjs"
 import { Navbar } from "@/src/components/layout/navbar"
 import { ThemeProvider } from "@/src/providers/theme-provider"
 import { Toaster } from "@/src/components/shared/toaster"
@@ -35,11 +36,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background font-sans antialiased`}
       >
-        <ThemeProvider defaultTheme="dark" storageKey="devion-theme">
-          <Navbar />
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        <ClerkProvider afterSignOutUrl="/" signInUrl="/sign-in" signUpUrl="/sign-up">
+          <ThemeProvider defaultTheme="dark" storageKey="devion-theme">
+            <Navbar />
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   )

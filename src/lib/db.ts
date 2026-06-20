@@ -2,10 +2,6 @@ import { Kysely, PostgresDialect } from "kysely"
 import pg from "pg"
 
 interface Database {
-  user: any
-  session: any
-  account: any
-  verification: any
   users: {
     id: string
     email: string

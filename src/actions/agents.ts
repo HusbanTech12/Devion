@@ -1,14 +1,13 @@
 "use server"
 
-import { headers } from "next/headers"
+import { auth } from "@clerk/nextjs/server"
 import { revalidatePath } from "next/cache"
-import { auth } from "@/src/lib/auth"
 import { db } from "@/src/lib/db"
 import { createAgentSchema } from "@/src/lib/validation"
 
 export async function createAgent(data: FormData | unknown) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) return { success: false, error: "Unauthorized" } as const
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: "Unauthorized" } as const
 
   const parsed = createAgentSchema.safeParse(
     data instanceof FormData ? Object.fromEntries(data) : data
@@ -19,7 +18,7 @@ export async function createAgent(data: FormData | unknown) {
 
   const agent = await db
     .insertInto("agents")
-    .values({ user_id: session.user.id, ...parsed.data } as any)
+    .values({ user_id: userId, ...parsed.data } as any)
     .returningAll()
     .executeTakeFirst()
 
@@ -28,13 +27,13 @@ export async function createAgent(data: FormData | unknown) {
 }
 
 export async function getAgents() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) return { success: false, error: "Unauthorized" } as const
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: "Unauthorized" } as const
 
   const data = await db
     .selectFrom("agents")
     .selectAll()
-    .where("user_id", "=", session.user.id)
+    .where("user_id", "=", userId)
     .orderBy("created_at", "desc")
     .execute()
 

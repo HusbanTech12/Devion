@@ -9,7 +9,7 @@
 | Styling | **Tailwind CSS v4** | `@import "tailwindcss"` (NOT `@tailwind` directives) |
 | UI Library | **shadcn/ui** | Install with `npx shadcn@latest add ...` |
 | Animations | **Framer Motion** | `framer-motion` |
-| Auth | **Better Auth** | `better-auth` + `better-auth/next-js` |
+| Auth | **Clerk** | `@clerk/nextjs` |
 | Database | **Supabase PostgreSQL** | `@supabase/supabase-js` + `@supabase/ssr` |
 | Email | **Resend** + **React Email** | `resend`, `@react-email/components` |
 | Validation | **Zod** | |
@@ -111,9 +111,9 @@ src/
 │   │   ├── client.ts             # Browser client
 │   │   ├── server.ts             # Server client (Server Components, Actions)
 │   │   └── admin.ts              # Service role client (admin-only)
-│   ├── auth.ts                   # Better Auth config + RBAC helpers
-│   ├── auth-client.ts            # Client-side auth client
-│   ├── db.ts                     # Kysely database instance for Better Auth
+│   ├── auth.ts                   # Clerk server auth + RBAC helpers
+│   ├── auth-client.ts            # Client-side auth (Clerk hooks wrapper)
+│   ├── db.ts                     # Kysely database instance for app queries
 │   ├── resend/
 │   │   └── send.ts               # Email sending helper
 │   └── utils.ts                  # cn(), formatDate(), etc.
@@ -141,7 +141,7 @@ src/
 ### 1. Server Functions (Server Actions)
 
 - Place mutation logic in `src/actions/` — one file per domain
-- Always verify auth within every Server Function using Better Auth
+- Always verify auth within every Server Function using Clerk's `auth()`
 - Use `'use server'` at module level (file-level directive)
 - Return typed responses: `{ success: true, data: T } | { success: false, error: string }`
 
@@ -149,9 +149,9 @@ src/
 // src/actions/agents.ts
 "use server"
 
-import { headers } from "next/headers"
-import { auth } from "@/src/lib/auth"
+import { auth } from "@clerk/nextjs/server"
 import { revalidatePath } from "next/cache"
+import { db } from "@/src/lib/db"
 import { z } from "zod"
 
 const createAgentSchema = z.object({
@@ -160,13 +160,13 @@ const createAgentSchema = z.object({
 })
 
 export async function createAgent(data: FormData | z.infer<typeof createAgentSchema>) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) return { success: false, error: "Unauthorized" } as const
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: "Unauthorized" } as const
 
   const parsed = createAgentSchema.safeParse(data)
   if (!parsed.success) return { success: false, error: parsed.error.message } as const
 
-  // ... insert to Supabase
+  // ... insert to DB
   revalidatePath("/dashboard/agents")
   return { success: true, data: agent }
 }
@@ -194,15 +194,19 @@ export async function POST(req: Request) {
 - **Admin context**: Use `src/lib/supabase/admin.ts` (service role key, server-only)
 - Never expose the service role key to the client
 
-### 4. Auth (Better Auth)
+### 4. Auth (Clerk)
 
-- Better Auth manages its own `user`, `session`, `account`, `verification` tables via Kysely adapter
-- User role (`admin` / `team` / `client`) stored as additional field on Better Auth's user model
-- Server components/actions use `auth.api.getSession({ headers: await headers() })`
-- Client components use `useSession()` hook from `better-auth/react`
-- Auth API routes at `src/app/api/auth/[...all]/route.ts`
-- Proxy (`proxy.ts`) checks session cookie for protected routes
-- Admin emails configured in `src/lib/constants.ts` `ADMIN_EMAILS`
+- **Server components/actions**: Use `auth()` from `@clerk/nextjs/server` to get `userId`
+- **Server user details**: Use `currentUser()` from `@clerk/nextjs/server` for full user object
+- **Client components**: Use `useUser()`, `useAuth()`, `useSignIn()`, `useSignUp()` from `@clerk/nextjs`
+- **Custom sign-in flows**: Use `useSignIn()` hook with `signIn.create({ identifier, password })` + `signIn.finalize()`
+- **Custom sign-up flows**: Use `useSignUp()` hook with `signUp.create({ emailAddress, password, ... })` + `signUp.finalize()`
+- **Middleware**: `proxy.ts` uses `clerkMiddleware()` from `@clerk/nextjs/server`
+- **Root layout**: Wrapped with `<ClerkProvider>` from `@clerk/nextjs`
+- **Role**: Stored in custom `users` table; syncs on dashboard access or via Clerk webhook
+- **Admin emails**: Configured in `src/lib/constants.ts` `ADMIN_EMAILS`
+- **Webhook**: Clerk webhook at `src/app/api/webhooks/clerk/route.ts` syncs users to DB
+- The `useSession()` custom hook from `@/src/lib/auth-client` wraps Clerk's `useUser()` for backward compatibility
 
 ### 5. Forms
 
@@ -253,11 +257,12 @@ export async function POST(req: Request) {
 ## Authentication Flow
 
 1. User visits → marketing landing page (public)
-2. Clicks "Get Started" → custom sign-up form
-3. Better Auth creates user record in its own `user` table
-4. After sign-in → redirected to dashboard
-5. Dashboard layout checks `auth.api.getSession()` → redirects to `/sign-in` if unauthenticated
-6. Server Actions verify session on every call
+2. Clicks "Get Started" → custom sign-up form (uses Clerk's `useSignUp()`)
+3. Clerk creates user in Clerk's infrastructure
+4. After sign-up/sign-in → redirected to dashboard
+5. Dashboard layout checks `auth()` from Clerk → redirects to `/sign-in` if unauthenticated
+6. User is synced to custom `users` table with role from `ADMIN_EMAILS` / `TEAM_EMAILS`
+7. Server Actions verify `userId` via Clerk's `auth()` on every call
 
 ## Data Flow
 
@@ -269,18 +274,13 @@ export async function POST(req: Request) {
 ## Environment Variables
 
 ```
-# Better Auth
-BETTER_AUTH_SECRET=
-BETTER_AUTH_URL=
+# Clerk
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+CLERK_WEBHOOK_SECRET=
 
-# Supabase (PostgreSQL)
+# Database (PostgreSQL)
 DATABASE_URL=
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
 
 # Resend
 RESEND_API_KEY=
@@ -572,13 +572,18 @@ Every Server Function must:
 Example:
 
 ```ts
+import { auth } from "@clerk/nextjs/server"
+
 const { userId } = await auth()
+if (!userId) throw new Error("Unauthorized")
 
-if (!userId) {
-  throw new Error("Unauthorized")
-}
+const user = await db
+  .selectFrom("users")
+  .select("role")
+  .where("id", "=", userId)
+  .executeTakeFirst()
 
-if (user.role !== "admin") {
+if (user?.role !== "admin") {
   throw new Error("Forbidden")
 }
 ```
@@ -603,23 +608,21 @@ Never expose data that does not belong to the current user.
 
 ---
 
-# Better Auth Integration
+# Clerk Integration
 
-Role is stored as an additional field on Better Auth's user model.
+Role is stored in the custom `users` table (PostgreSQL via Kysely).
 
-Better Auth manages its own tables:
-
-* `user` — user accounts with custom `role` and `name` fields
-* `session` — active sessions
-* `account` — OAuth/social accounts
-* `verification` — email verification tokens
+Clerk manages authentication; the `users` table stores profile + role data.
 
 On user creation:
 
-1. User signs up via Better Auth
-2. `role` defaults to `"client"` 
-3. If email is in `ADMIN_EMAILS` list (see `src/lib/constants.ts`), role is set to `"admin"`
-4. Admin can update role later via database
+1. User signs up via Clerk (`useSignUp()`)
+2. Role is synced to `users` table on first dashboard visit
+3. `role` defaults to `"client"`
+4. If email is in `ADMIN_EMAILS` list (see `src/lib/constants.ts`), role is set to `"admin"`
+5. If email is in `TEAM_EMAILS` list, role is set to `"team"`
+6. A Clerk webhook (`/api/webhooks/clerk`) can also sync on `user.created`/`user.updated`
+7. Admin can update role later via the Users Management page in settings
 
 ---
 

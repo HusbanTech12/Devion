@@ -20,7 +20,8 @@ import {
   DropdownMenuItem,
 } from "@/src/components/ui/dropdown-menu"
 import { cn } from "@/src/lib/utils"
-import { useSession, signOut } from "@/src/lib/auth-client"
+import { useSession } from "@/src/lib/auth-client"
+import { useAuth } from "@clerk/nextjs"
 
 const baseLinks = [
   { href: "/", label: "Home" },
@@ -34,10 +35,12 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const { data: session } = useSession()
+  const { signOut } = useAuth()
   const user = session?.user
   const role = (user as { role?: string } | undefined)?.role
   const isAdmin = role === "admin"
   const isDashboard = pathname.startsWith("/dashboard")
+  const isAuth = pathname.startsWith("/sign-in") || pathname.startsWith("/sign-up")
 
   const links = useMemo(
     () =>
@@ -47,7 +50,7 @@ export function Navbar() {
     [isAdmin]
   )
 
-  if (isDashboard) return null
+  if (isDashboard || isAuth) return null
 
   const initials = user?.name
     ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)

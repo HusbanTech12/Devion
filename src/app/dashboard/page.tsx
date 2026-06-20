@@ -1,25 +1,23 @@
-import { headers } from "next/headers"
+import { auth, currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
-import { auth } from "@/src/lib/auth"
 import { db } from "@/src/lib/db"
 import { AdminOverview } from "./_components/admin-overview"
 import { TeamOverview } from "./_components/team-overview"
 import { ClientOverview } from "./_components/client-overview"
 
 export default async function DashboardPage() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) redirect("/sign-in")
-
-  const betterUser = session.user as { id: string; email: string; name?: string; role?: string }
+  const { userId } = await auth()
+  if (!userId) redirect("/sign-in")
 
   const user = await db
     .selectFrom("users")
     .select(["role", "name"])
-    .where("id", "=", betterUser.id)
+    .where("id", "=", userId)
     .executeTakeFirst()
 
-  const role = user?.role ?? betterUser.role ?? "client"
-  const userName = user?.name ?? betterUser.name ?? null
+  const clerkUser = await currentUser()
+  const role = user?.role ?? "client"
+  const userName = user?.name ?? clerkUser?.fullName ?? null
 
   switch (role) {
     case "admin":

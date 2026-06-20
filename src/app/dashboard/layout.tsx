@@ -1,6 +1,5 @@
-import { headers } from "next/headers"
 import { redirect } from "next/navigation"
-import { auth } from "@/src/lib/auth"
+import { auth, currentUser } from "@clerk/nextjs/server"
 import { db } from "@/src/lib/db"
 import { ADMIN_EMAILS, TEAM_EMAILS } from "@/src/lib/constants"
 import { DashboardShell } from "@/src/components/layout/dashboard-shell"
@@ -11,26 +10,27 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) redirect("/sign-in")
-
-  const betterUser = session.user as { id: string; email: string; name?: string; role?: string }
+  const { userId } = await auth()
+  if (!userId) redirect("/sign-in")
 
   let dbUser = await db
     .selectFrom("users")
     .selectAll()
-    .where("id", "=", betterUser.id)
+    .where("id", "=", userId)
     .executeTakeFirst()
 
   if (!dbUser) {
-    const email = betterUser.email
+    const user = await currentUser()
+    if (!user) redirect("/sign-in")
+
+    const email = user.emailAddresses[0]?.emailAddress || ""
     const role: UserRole = ADMIN_EMAILS.includes(email) ? "admin" : TEAM_EMAILS.includes(email) ? "team" : "client"
     await db
       .insertInto("users")
       .values({
-        id: betterUser.id,
+        id: userId,
         email,
-        name: betterUser.name || null,
+        name: user.fullName || null,
         role,
       })
       .execute()
@@ -38,13 +38,13 @@ export default async function DashboardLayout({
     dbUser = await db
       .selectFrom("users")
       .selectAll()
-      .where("id", "=", betterUser.id)
+      .where("id", "=", userId)
       .executeTakeFirst()!
   }
 
   const role = (dbUser?.role ?? "client") as UserRole
-  const userName = dbUser?.name ?? betterUser.name ?? null
-  const userEmail = dbUser?.email ?? betterUser.email ?? ""
+  const userName = dbUser?.name ?? null
+  const userEmail = dbUser?.email ?? ""
 
   return (
     <DashboardShell role={role} userName={userName} userEmail={userEmail}>

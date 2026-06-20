@@ -1,58 +1,19 @@
 "use server"
 
-import { headers } from "next/headers"
-import { auth } from "@/src/lib/auth"
+import { auth } from "@clerk/nextjs/server"
 import { db } from "@/src/lib/db"
 import { ADMIN_EMAILS, TEAM_EMAILS } from "@/src/lib/constants"
 import { revalidatePath } from "next/cache"
 import type { UserRole } from "@/src/types"
 
-export async function syncUser() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) return { success: false, error: "Unauthorized" } as const
-
-  const { user } = session
-  const email = user.email
-  const role: UserRole = ADMIN_EMAILS.includes(email) ? "admin" : TEAM_EMAILS.includes(email) ? "team" : "client"
-
-  const existing = await db
-    .selectFrom("users")
-    .select(["id", "role"])
-    .where("id", "=", user.id)
-    .executeTakeFirst()
-
-  if (existing) {
-    if (existing.role !== role) {
-      await db
-        .updateTable("users")
-        .set({ role })
-        .where("id", "=", user.id)
-        .execute()
-    }
-    return { success: true, data: { id: user.id, email, role } }
-  }
-
-  await db
-    .insertInto("users")
-    .values({
-      id: user.id,
-      email,
-      name: (user as any).name || null,
-      role,
-    })
-    .execute()
-
-  return { success: true, data: { id: user.id, email, role } }
-}
-
 export async function getAllUsers() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) return { success: false, error: "Unauthorized" } as const
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: "Unauthorized" } as const
 
   const currentUser = await db
     .selectFrom("users")
     .select("role")
-    .where("id", "=", session.user.id)
+    .where("id", "=", userId)
     .executeTakeFirst()
 
   if (!currentUser || currentUser.role !== "admin") {
@@ -68,14 +29,14 @@ export async function getAllUsers() {
   return { success: true, data: users }
 }
 
-export async function updateUserRole(userId: string, newRole: UserRole) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) return { success: false, error: "Unauthorized" } as const
+export async function updateUserRole(targetUserId: string, newRole: UserRole) {
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: "Unauthorized" } as const
 
   const currentUser = await db
     .selectFrom("users")
     .select("role")
-    .where("id", "=", session.user.id)
+    .where("id", "=", userId)
     .executeTakeFirst()
 
   if (!currentUser || currentUser.role !== "admin") {
@@ -85,21 +46,21 @@ export async function updateUserRole(userId: string, newRole: UserRole) {
   await db
     .updateTable("users")
     .set({ role: newRole })
-    .where("id", "=", userId)
+    .where("id", "=", targetUserId)
     .execute()
 
   revalidatePath("/dashboard/settings/users")
-  return { success: true, data: { id: userId, role: newRole } }
+  return { success: true, data: { id: targetUserId, role: newRole } }
 }
 
-export async function deleteUser(userId: string) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) return { success: false, error: "Unauthorized" } as const
+export async function deleteUser(targetUserId: string) {
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: "Unauthorized" } as const
 
   const currentUser = await db
     .selectFrom("users")
     .select("role")
-    .where("id", "=", session.user.id)
+    .where("id", "=", userId)
     .executeTakeFirst()
 
   if (!currentUser || currentUser.role !== "admin") {
@@ -108,7 +69,7 @@ export async function deleteUser(userId: string) {
 
   await db
     .deleteFrom("users")
-    .where("id", "=", userId)
+    .where("id", "=", targetUserId)
     .execute()
 
   revalidatePath("/dashboard/settings/users")
