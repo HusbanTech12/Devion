@@ -6,6 +6,13 @@ import { headers } from "next/headers"
 import { ADMIN_EMAILS, TEAM_EMAILS } from "@/src/lib/constants"
 import type { UserRole } from "@/src/types"
 
+const baseURL =
+  process.env.BETTER_AUTH_URL ||
+  process.env.NEXT_PUBLIC_APP_URL ||
+  (process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000")
+
 export const auth = betterAuth({
   database: kyselyAdapter(db, {
     type: "postgres",
@@ -22,7 +29,6 @@ export const auth = betterAuth({
         defaultValue: "client",
         input: false,
       },
-
     },
   },
   plugins: [nextCookies()],
