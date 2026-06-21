@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { ClerkProvider } from "@clerk/nextjs"
 import { Navbar } from "@/src/components/layout/navbar"
-import { ThemeProvider } from "@/src/providers/theme-provider"
 import { Toaster } from "@/src/components/shared/toaster"
 import "./globals.css"
 
@@ -32,16 +31,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background font-sans antialiased`}
       >
         <ClerkProvider afterSignOutUrl="/" signInUrl="/sign-in" signUpUrl="/sign-up">
-          <ThemeProvider defaultTheme="dark" storageKey="devion-theme">
-            <Navbar />
-            {children}
-            <Toaster />
-          </ThemeProvider>
+          <Navbar />
+          {children}
+          <Toaster />
         </ClerkProvider>
       </body>
     </html>

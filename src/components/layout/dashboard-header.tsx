@@ -4,8 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import Image from "next/image"
-import { Menu, Search, Bell, Sun, Moon, Command } from "lucide-react"
-import { useTheme } from "next-themes"
+import { Menu, Search, Bell, Command } from "lucide-react"
 import { useAuth } from "@clerk/nextjs"
 import { Button } from "@/src/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
@@ -75,7 +74,6 @@ const searchItems: Record<string, { href: string; label: string }[]> = {
 
 export function DashboardHeader({ onMenuClick, userName, userEmail, userRole }: Props) {
   const pathname = usePathname()
-  const { theme, setTheme } = useTheme()
   const { signOut } = useAuth()
   const [commandOpen, setCommandOpen] = useState(false)
 
@@ -125,17 +123,6 @@ export function DashboardHeader({ onMenuClick, userName, userEmail, userRole }: 
               <Command className="h-3 w-3" />K
             </kbd>
           </button>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="shrink-0"
-          >
-            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            <span className="sr-only">Toggle theme</span>
-          </Button>
 
           <Button variant="ghost" size="icon" className="shrink-0">
             <Bell className="h-5 w-5" />
