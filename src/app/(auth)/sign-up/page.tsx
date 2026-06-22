@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { useSignUp } from "@clerk/nextjs"
+import { useSignUp } from "@clerk/nextjs/legacy"
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors"
 import { toast } from "sonner"
 import { Loader2, ArrowLeft } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
@@ -11,7 +12,7 @@ import { Label } from "@/src/components/ui/label"
 import { APP_NAME } from "@/src/lib/constants"
 
 export default function SignUpPage() {
-  const { signUp } = useSignUp()
+  const { isLoaded, signUp, setActive } = useSignUp()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -22,7 +23,7 @@ export default function SignUpPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!signUp) return
+    if (!isLoaded || !signUp) return
     setError("")
     setLoading(true)
 
@@ -34,27 +35,25 @@ export default function SignUpPage() {
         lastName: name.split(" ").slice(1).join(" ") || undefined,
       })
 
-      if (result.error) {
-        setError(result.error.message || "Something went wrong")
-        return
-      }
-
-      if (signUp.status === "complete") {
-        await signUp.finalize()
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId })
         toast.success("Account created!", { description: "Welcome to Devion." })
-        window.location.href = "/dashboard"
+        window.location.href = "/"
         return
       }
 
-      const { error: sendErr } = await signUp.verifications.sendEmailCode()
-      if (sendErr) {
-        setError(sendErr.message || "Failed to send verification code")
-        return
-      }
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" })
       setVerifying(true)
       toast.success("Verification code sent", { description: "Check your email inbox." })
-    } catch {
-      setError("Something went wrong. Please try again.")
+    } catch (err) {
+      console.error("Sign-up error:", err)
+      if (isClerkAPIResponseError(err)) {
+        setError(err.errors?.[0]?.message || "Something went wrong. Please try again.")
+      } else if (err instanceof Error) {
+        setError(err.message || "Something went wrong. Please try again.")
+      } else {
+        setError("Something went wrong. Please try again.")
+      }
     } finally {
       setLoading(false)
     }
@@ -62,24 +61,46 @@ export default function SignUpPage() {
 
   async function handleVerify(e: React.FormEvent) {
     e.preventDefault()
-    if (!signUp || code.length < 6) return
+    if (!isLoaded || !signUp || code.length < 6) return
     setError("")
     setLoading(true)
 
     try {
-      const { error: verifyErr } = await signUp.verifications.verifyEmailCode({ code })
-      if (verifyErr) {
-        setError(verifyErr.message || "Invalid code")
-        return
-      }
+      const result = await signUp.attemptEmailAddressVerification({ code })
 
-      await signUp.finalize()
-      toast.success("Account created!", { description: "Welcome to Devion." })
-      window.location.href = "/dashboard"
-    } catch {
-      setError("Something went wrong. Please try again.")
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId })
+        toast.success("Account created!", { description: "Welcome to Devion." })
+        window.location.href = "/"
+      }
+    } catch (err) {
+      console.error("Verify error:", err)
+      if (isClerkAPIResponseError(err)) {
+        setError(err.errors?.[0]?.message || "Verification failed. Please try again.")
+      } else if (err instanceof Error) {
+        setError(err.message || "Verification failed. Please try again.")
+      } else {
+        setError("Something went wrong. Please try again.")
+      }
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function handleResendCode() {
+    if (!signUp) return
+    try {
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" })
+      toast.success("Code resent", { description: "Check your email." })
+    } catch (err) {
+      console.error("Resend code error:", err)
+      if (isClerkAPIResponseError(err)) {
+        setError(err.errors?.[0]?.message || "Failed to resend code")
+      } else if (err instanceof Error) {
+        setError(err.message || "Failed to resend code")
+      } else {
+        setError("Failed to resend code")
+      }
     }
   }
 
@@ -137,14 +158,7 @@ export default function SignUpPage() {
             <button
               type="button"
               className="text-xs text-muted-foreground hover:text-primary transition-colors"
-              onClick={async () => {
-                const { error: sendErr } = await signUp!.verifications.sendEmailCode()
-                if (sendErr) {
-                  setError(sendErr.message)
-                } else {
-                  toast.success("Code resent", { description: "Check your email." })
-                }
-              }}
+              onClick={handleResendCode}
             >
               Resend code
             </button>

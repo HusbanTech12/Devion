@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { useSignIn } from "@clerk/nextjs"
+import { useSignIn } from "@clerk/nextjs/legacy"
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors"
 import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
@@ -11,7 +12,7 @@ import { Label } from "@/src/components/ui/label"
 import { APP_NAME } from "@/src/lib/constants"
 
 export default function SignInPage() {
-  const { signIn } = useSignIn()
+  const { isLoaded, signIn, setActive } = useSignIn()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -19,24 +20,40 @@ export default function SignInPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!signIn) return
+    if (!isLoaded || !signIn) return
     setError("")
     setLoading(true)
 
     try {
-      const result = await signIn.password({ emailAddress: email, password })
-      if (result.error) {
-        setError(result.error.message || "Invalid credentials")
-        return
-      }
+      const result = await signIn.create({
+        strategy: "password",
+        identifier: email,
+        password,
+      })
 
-      if (signIn.status === "complete") {
-        await signIn.finalize()
-        toast.success("Welcome back!", { description: "Successfully signed in." })
-        window.location.href = "/dashboard"
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId })
+        toast.success("Welcome back!", { description: "Signed in successfully." })
+        window.location.href = "/"
+      } else {
+        setError("Something went wrong. Please try again.")
       }
-    } catch {
-      setError("Something went wrong. Please try again.")
+    } catch (err) {
+      console.error("Sign-in error:", err)
+      if (isClerkAPIResponseError(err)) {
+        const clerkErr = err.errors?.[0]
+        if (clerkErr?.code === "form_identifier_not_found") {
+          setError("No account found with this email address.")
+        } else if (clerkErr?.code === "form_password_incorrect") {
+          setError("Incorrect password.")
+        } else {
+          setError(clerkErr?.longMessage || "Invalid email or password.")
+        }
+      } else if (err instanceof Error) {
+        setError(err.message || "Something went wrong.")
+      } else {
+        setError("Something went wrong. Please try again.")
+      }
     } finally {
       setLoading(false)
     }
@@ -47,7 +64,7 @@ export default function SignInPage() {
       <div className="space-y-1.5">
         <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
         <p className="text-sm text-muted-foreground">
-          Sign in to your {APP_NAME} account
+          Sign in to {APP_NAME}
         </p>
       </div>
 
@@ -68,12 +85,6 @@ export default function SignInPage() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
-            <Link
-              href="/sign-in"
-              className="text-xs text-muted-foreground hover:text-primary transition-colors"
-            >
-              Forgot password?
-            </Link>
           </div>
           <Input
             id="password"
@@ -85,8 +96,6 @@ export default function SignInPage() {
             autoComplete="current-password"
           />
         </div>
-
-        <div id="clerk-captcha" />
 
         {error && (
           <div className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -105,12 +114,14 @@ export default function SignInPage() {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">New to {APP_NAME}?</span>
+          <span className="bg-background px-2 text-muted-foreground">
+            Don&apos;t have an account?
+          </span>
         </div>
       </div>
 
       <Button asChild variant="outline" className="w-full" size="lg">
-        <Link href="/sign-up">Create an account</Link>
+        <Link href="/sign-up">Create account</Link>
       </Button>
     </div>
   )

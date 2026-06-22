@@ -83,7 +83,7 @@ export async function guardRouteForPage(pathname: string): Promise<UserRole> {
   )?.[1]
 
   if (allowedRoles && !allowedRoles.includes(role)) {
-    redirect("/dashboard")
+    redirect("/")
   }
 
   return role

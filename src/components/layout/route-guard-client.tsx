@@ -39,7 +39,7 @@ export function RouteGuard({
     if (match) {
       const [, allowedRoles] = match
       if (!allowedRoles.includes(role)) {
-        router.replace("/dashboard")
+        router.replace("/")
       }
     }
   }, [pathname, role, router])

@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { auth, currentUser } from "@clerk/nextjs/server"
 import { db } from "@/src/lib/db"
 import { ADMIN_EMAILS, TEAM_EMAILS } from "@/src/lib/constants"
 import type { UserRole } from "@/src/types"
@@ -20,7 +20,18 @@ export async function getCurrentUserRole(): Promise<UserRole> {
   const dbRole = await getDbRole(userId)
   if (dbRole) return dbRole
 
-  return "client"
+  const user = await currentUser()
+  if (!user) throw new Error("Unauthorized")
+
+  const email = user.emailAddresses[0]?.emailAddress || ""
+  const role: UserRole = ADMIN_EMAILS.includes(email) ? "admin" : TEAM_EMAILS.includes(email) ? "team" : "client"
+
+  await db
+    .insertInto("users")
+    .values({ id: userId, email, name: user.fullName || null, role })
+    .execute()
+
+  return role
 }
 
 export async function isAdmin(): Promise<boolean> {
