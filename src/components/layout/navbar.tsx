@@ -146,31 +146,33 @@ export function Navbar() {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="relative h-9 w-9 rounded-full p-0 ring-2 ring-primary/10 hover:ring-primary/30 transition-all cursor-pointer">
+                  <Button
+                    variant="ghost"
+                    className="relative h-9 w-9 rounded-full p-0 ring-2 ring-primary/10 hover:ring-primary/30 transition-all"
+                  >
                     <Avatar className="h-9 w-9">
                       <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? ""} />
                       <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary text-xs font-medium">
                         {initials}
                       </AvatarFallback>
                     </Avatar>
-                  </button>
+                  </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  className="w-64 mt-2 p-1.5 rounded-2xl border-primary/10 bg-background/80 backdrop-blur-3xl"
+                  className="w-64 p-1.5 rounded-2xl border-primary/10 bg-background/80 backdrop-blur-3xl shadow-2xl"
                   align="end"
-                  side="bottom"
-                  sideOffset={8}
+                  sideOffset={10}
                 >
                   <DropdownMenuLabel className="p-0">
-                    <div className="flex items-center gap-3 px-3 py-3">
-                      <Avatar className="h-10 w-10 ring-2 ring-primary/20">
+                    <div className="flex items-center gap-3 px-3 py-3.5">
+                      <Avatar className="h-11 w-11 ring-2 ring-primary/20">
                         <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? ""} />
                         <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary text-sm font-medium">
                           {initials}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col min-w-0">
-                        <p className="text-sm font-medium truncate">{user?.name ?? "User"}</p>
+                        <p className="text-sm font-semibold truncate">{user?.name ?? "User"}</p>
                         <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
                         {isAdmin && (
                           <span className="mt-1 inline-flex w-fit items-center gap-1 rounded-full bg-gradient-to-r from-primary/20 to-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
@@ -192,6 +194,7 @@ export function Navbar() {
                       Dashboard
                     </Link>
                   </DropdownMenuItem>
+
                   <DropdownMenuSeparator className="bg-primary/5" />
 
                   <DropdownMenuItem asChild className="rounded-xl focus:bg-primary/5 cursor-pointer">

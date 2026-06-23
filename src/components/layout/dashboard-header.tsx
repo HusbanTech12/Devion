@@ -3,9 +3,13 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import Image from "next/image"
-import { Menu, Search, Bell, Command } from "lucide-react"
+import { useUser } from "@clerk/nextjs"
 import { useAuth } from "@clerk/nextjs"
+import Image from "next/image"
+import {
+  Menu, Search, Bell, Command, LayoutDashboard, User,
+  Settings, CreditCard, LifeBuoy, LogOut, Sparkles,
+} from "lucide-react"
 import { Button } from "@/src/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import {
@@ -75,7 +79,11 @@ const searchItems: Record<string, { href: string; label: string }[]> = {
 export function DashboardHeader({ onMenuClick, userName, userEmail, userRole }: Props) {
   const pathname = usePathname()
   const { signOut } = useAuth()
+  const { user: clerkUser } = useUser()
   const [commandOpen, setCommandOpen] = useState(false)
+
+  const isAdmin = userRole === "admin"
+  const avatarSrc = clerkUser?.imageUrl || gravatarUrl(userEmail)
 
   const initials = userName
     ? userName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
@@ -131,40 +139,102 @@ export function DashboardHeader({ onMenuClick, userName, userEmail, userRole }: 
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0 ring-2 ring-primary/10 hover:ring-primary/30 transition-all">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={gravatarUrl(userEmail)} alt={userName ?? ""} />
+                  <AvatarImage src={avatarSrc} alt={userName ?? ""} />
                   <AvatarFallback className="bg-primary/10 text-primary text-xs">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end">
-              <DropdownMenuLabel>
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium">{userName ?? "User"}</p>
-                  <p className="text-xs text-muted-foreground">{userEmail}</p>
-                  <span className="mt-1 inline-flex w-fit rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary capitalize">
-                    {userRole}
-                  </span>
+            <DropdownMenuContent
+              className="w-64 p-1.5 rounded-2xl border-primary/10 bg-background/80 backdrop-blur-3xl shadow-2xl"
+              align="end"
+              sideOffset={10}
+            >
+              <DropdownMenuLabel className="p-0">
+                <div className="flex items-center gap-3 px-3 py-3.5">
+                  <Avatar className="h-11 w-11 ring-2 ring-primary/20">
+                    <AvatarImage src={avatarSrc} alt={userName ?? ""} />
+                    <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary text-sm font-medium">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col min-w-0">
+                    <p className="text-sm font-semibold truncate">{userName ?? "User"}</p>
+                    <p className="text-xs text-muted-foreground truncate">{userEmail}</p>
+                    {isAdmin && (
+                      <span className="mt-1 inline-flex w-fit items-center gap-1 rounded-full bg-gradient-to-r from-primary/20 to-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
+                        <Sparkles className="h-2.5 w-2.5" />
+                        Admin
+                      </span>
+                    )}
+                  </div>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href="/dashboard/settings">Settings</Link>
+
+              <DropdownMenuSeparator className="bg-primary/5" />
+
+              <DropdownMenuItem asChild className="rounded-xl focus:bg-primary/5 cursor-pointer">
+                <Link href="/dashboard" className="flex items-center gap-2.5 py-2">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
+                    <LayoutDashboard className="h-3.5 w-3.5 text-primary" />
+                  </div>
+                  Dashboard
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/">Back to Website</Link>
+
+              <DropdownMenuSeparator className="bg-primary/5" />
+
+              <DropdownMenuItem asChild className="rounded-xl focus:bg-primary/5 cursor-pointer">
+                <Link href="/dashboard/settings" className="flex items-center gap-2.5 py-2">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-muted">
+                    <User className="h-3.5 w-3.5" />
+                  </div>
+                  Profile Settings
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild className="rounded-xl focus:bg-primary/5 cursor-pointer">
+                <Link href="/dashboard/settings?tab=account" className="flex items-center gap-2.5 py-2">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-muted">
+                    <Settings className="h-3.5 w-3.5" />
+                  </div>
+                  Account Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="rounded-xl focus:bg-primary/5 cursor-pointer">
+                <Link href="/dashboard/billing" className="flex items-center gap-2.5 py-2">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-muted">
+                    <CreditCard className="h-3.5 w-3.5" />
+                  </div>
+                  Billing
+                </Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator className="bg-primary/5" />
+
+              <DropdownMenuItem asChild className="rounded-xl focus:bg-primary/5 cursor-pointer">
+                <Link href="/" className="flex items-center gap-2.5 py-2">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-muted">
+                    <LifeBuoy className="h-3.5 w-3.5" />
+                  </div>
+                  Back to Website
+                </Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator className="bg-primary/5" />
+
               <DropdownMenuItem
-                className="text-destructive"
-                  onClick={async () => {
-                    await signOut()
-                    window.location.href = "/sign-in"
-                  }}
+                className="rounded-xl text-destructive focus:text-destructive focus:bg-destructive/5 flex items-center gap-2.5 py-2 cursor-pointer"
+                onClick={async () => {
+                  await signOut()
+                  window.location.href = "/sign-in"
+                }}
               >
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-destructive/10">
+                  <LogOut className="h-3.5 w-3.5" />
+                </div>
                 Sign Out
               </DropdownMenuItem>
             </DropdownMenuContent>
