@@ -3,7 +3,6 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useSignIn } from "@clerk/nextjs"
-import { isClerkAPIResponseError } from "@clerk/nextjs/errors"
 import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
@@ -12,7 +11,7 @@ import { Label } from "@/src/components/ui/label"
 import { APP_NAME } from "@/src/lib/constants"
 
 export default function SignInPage() {
-  const { isLoaded, signIn, setActive } = useSignIn()
+  const { signIn, fetchStatus } = useSignIn()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -20,48 +19,41 @@ export default function SignInPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!isLoaded || !signIn) return
+    if (!signIn || fetchStatus === "fetching") return
     setError("")
     setLoading(true)
 
     try {
-      const result = await signIn.create({
-        strategy: "password",
-        identifier: email,
-        password,
-      })
-
-      if (result.status === "complete") {
-        await setActive({ session: result.createdSessionId })
-        toast.success("Welcome back!", { description: "Signed in successfully." })
-        window.location.href = "/"
-      } else {
-        setError("Something went wrong. Please try again.")
+      const createRes = await signIn.create({ identifier: email })
+      if (createRes.error) {
+        setError(createRes.error.longMessage || createRes.error.message || "Sign in failed.")
+        setLoading(false)
+        return
       }
-    } catch (err: unknown) {
-      console.error("=== SIGN-IN ERROR ===")
-      console.error("Error:", err)
-      console.error("Type:", typeof err)
-      console.error("Constructor:", (err as any)?.constructor?.name)
-      console.error("JSON:", JSON.stringify(err, Object.getOwnPropertyNames(err), 2))
-      if (isClerkAPIResponseError(err)) {
-        const clerkErr = err.errors?.[0]
-        console.error("Clerk status:", err.status)
-        console.error("Clerk errors:", JSON.stringify(err.errors, null, 2))
-        if (clerkErr?.code === "form_identifier_not_found") {
-          setError("No account found with this email address.")
-        } else if (clerkErr?.code === "form_password_incorrect") {
+
+      const passwordRes = await signIn.password({ password })
+      if (passwordRes.error) {
+        const code = passwordRes.error.code
+        if (code === "form_password_incorrect") {
           setError("Incorrect password.")
         } else {
-          setError(clerkErr?.longMessage || `[${err.status}] ${clerkErr?.code || "Unknown"}`)
+          setError(passwordRes.error.longMessage || passwordRes.error.message || "Sign in failed.")
         }
-      } else if (err instanceof Error) {
-        console.error("Full error:", JSON.stringify(err, Object.getOwnPropertyNames(err), 2))
-        setError(err.message)
-      } else {
-        setError(typeof err === "string" ? err : JSON.stringify(err))
+        setLoading(false)
+        return
       }
-    } finally {
+
+      const finalizeRes = await signIn.finalize()
+      if (finalizeRes.error) {
+        setError(finalizeRes.error.longMessage || "Failed to complete sign in.")
+        setLoading(false)
+        return
+      }
+      toast.success("Welcome back!", { description: "Signed in successfully." })
+      window.location.href = "/"
+    } catch (err) {
+      console.error("Sign-in error:", err)
+      setError("Something went wrong. Please try again.")
       setLoading(false)
     }
   }
@@ -113,7 +105,7 @@ export default function SignInPage() {
           </div>
         )}
 
-        <Button type="submit" className="w-full" disabled={loading} size="lg">
+        <Button type="submit" className="w-full" disabled={loading || fetchStatus === "fetching"} size="lg">
           {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {loading ? "Signing in..." : "Sign in"}
         </Button>

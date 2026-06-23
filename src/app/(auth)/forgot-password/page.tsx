@@ -3,7 +3,6 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useSignIn } from "@clerk/nextjs"
-import { isClerkAPIResponseError } from "@clerk/nextjs/errors"
 import { toast } from "sonner"
 import { Loader2, ArrowLeft, CheckCircle2 } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
@@ -14,7 +13,7 @@ import { APP_NAME } from "@/src/lib/constants"
 type Step = "email" | "code" | "new-password" | "done"
 
 export default function ForgotPasswordPage() {
-  const { isLoaded, signIn, setActive } = useSignIn()
+  const { signIn, fetchStatus } = useSignIn()
   const [step, setStep] = useState<Step>("email")
   const [email, setEmail] = useState("")
   const [code, setCode] = useState("")
@@ -25,28 +24,35 @@ export default function ForgotPasswordPage() {
 
   async function handleSendCode(e: React.FormEvent) {
     e.preventDefault()
-    if (!isLoaded || !signIn) return
+    if (!signIn || fetchStatus === "fetching") return
     setError("")
     setLoading(true)
 
     try {
-      await signIn.create({
-        strategy: "reset_password_email_code",
-        identifier: email,
-      })
+      const createRes = await signIn.create({ identifier: email })
+      if (createRes.error) {
+        const code = createRes.error.code
+        if (code === "form_identifier_not_found") {
+          setError("No account found with this email address.")
+        } else {
+          setError(createRes.error.longMessage || "Failed to send reset code.")
+        }
+        setLoading(false)
+        return
+      }
+
+      const sendRes = await signIn.resetPasswordEmailCode.sendCode()
+      if (sendRes.error) {
+        setError(sendRes.error.longMessage || "Failed to send reset code.")
+        setLoading(false)
+        return
+      }
+
       setStep("code")
       toast.success("Code sent!", { description: "Check your email for the reset code." })
     } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        const clerkErr = err.errors?.[0]
-        if (clerkErr?.code === "form_identifier_not_found") {
-          setError("No account found with this email address.")
-        } else {
-          setError(clerkErr?.longMessage || "Failed to send reset code.")
-        }
-      } else {
-        setError("Something went wrong. Please try again.")
-      }
+      console.error("Send code error:", err)
+      setError("Something went wrong. Please try again.")
     } finally {
       setLoading(false)
     }
@@ -54,32 +60,27 @@ export default function ForgotPasswordPage() {
 
   async function handleVerifyCode(e: React.FormEvent) {
     e.preventDefault()
-    if (!isLoaded || !signIn) return
+    if (!signIn || fetchStatus === "fetching") return
     setError("")
     setLoading(true)
 
     try {
-      const result = await signIn.attemptFirstFactor({
-        strategy: "reset_password_email_code",
-        code,
-      })
-
-      if (result.status === "complete" || result.status === "needs_second_factor") {
-        setStep("new-password")
-      } else {
-        setError("Invalid code. Please try again.")
-      }
-    } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        const clerkErr = err.errors?.[0]
-        if (clerkErr?.code === "form_code_incorrect") {
+      const verifyRes = await signIn.resetPasswordEmailCode.verifyCode({ code })
+      if (verifyRes.error) {
+        const code = verifyRes.error.code
+        if (code === "form_code_incorrect") {
           setError("Incorrect code. Please try again.")
         } else {
-          setError(clerkErr?.longMessage || "Failed to verify code.")
+          setError(verifyRes.error.longMessage || "Failed to verify code.")
         }
-      } else {
-        setError("Something went wrong. Please try again.")
+        setLoading(false)
+        return
       }
+
+      setStep("new-password")
+    } catch (err) {
+      console.error("Verify code error:", err)
+      setError("Something went wrong. Please try again.")
     } finally {
       setLoading(false)
     }
@@ -87,7 +88,7 @@ export default function ForgotPasswordPage() {
 
   async function handleResetPassword(e: React.FormEvent) {
     e.preventDefault()
-    if (!isLoaded || !signIn) return
+    if (!signIn || fetchStatus === "fetching") return
     setError("")
 
     if (password.length < 8) {
@@ -102,30 +103,47 @@ export default function ForgotPasswordPage() {
     setLoading(true)
 
     try {
-      const result = await signIn.resetPassword({ password })
+      const submitRes = await signIn.resetPasswordEmailCode.submitPassword({ password })
+      if (submitRes.error) {
+        setError(submitRes.error.longMessage || "Failed to reset password.")
+        setLoading(false)
+        return
+      }
 
-      if (result.status === "complete") {
-        await setActive({ session: result.createdSessionId })
-        setStep("done")
-        toast.success("Password reset!", { description: "You are now signed in." })
-      } else {
-        setError("Something went wrong. Please try again.")
+      const finalizeRes = await signIn.finalize()
+      if (finalizeRes.error) {
+        setError(finalizeRes.error.longMessage || "Failed to complete password reset.")
+        setLoading(false)
+        return
       }
+
+      setStep("done")
+      toast.success("Password reset!", { description: "You are now signed in." })
     } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        setError(err.errors?.[0]?.longMessage || "Failed to reset password.")
-      } else {
-        setError("Something went wrong. Please try again.")
-      }
+      console.error("Reset password error:", err)
+      setError("Something went wrong. Please try again.")
     } finally {
       setLoading(false)
     }
   }
 
-  function resendCode() {
+  async function resendCode() {
+    if (!signIn || fetchStatus === "fetching") return
     setCode("")
     setError("")
-    handleSendCode({ preventDefault: () => {} } as React.FormEvent)
+    setLoading(true)
+    try {
+      const sendRes = await signIn.resetPasswordEmailCode.sendCode()
+      if (sendRes.error) {
+        setError(sendRes.error.longMessage || "Failed to resend code.")
+      } else {
+        toast.success("Code resent!", { description: "Check your email for the reset code." })
+      }
+    } catch {
+      setError("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
