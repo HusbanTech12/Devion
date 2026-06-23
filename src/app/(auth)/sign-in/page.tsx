@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { useSignIn } from "@clerk/nextjs"
+import { useSignIn, useClerk } from "@clerk/nextjs"
 import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
@@ -12,6 +12,7 @@ import { APP_NAME } from "@/src/lib/constants"
 
 export default function SignInPage() {
   const { signIn, fetchStatus } = useSignIn()
+  const clerk = useClerk()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -24,35 +25,36 @@ export default function SignInPage() {
     setLoading(true)
 
     try {
-      const createRes = await signIn.create({ identifier: email })
-      if (createRes.error) {
-        setError(createRes.error.longMessage || createRes.error.message || "Sign in failed.")
-        setLoading(false)
-        return
-      }
+      const createRes = await signIn.create({ identifier: email, password })
 
-      const passwordRes = await signIn.password({ password })
-      if (passwordRes.error) {
-        const code = passwordRes.error.code
-        if (code === "form_password_incorrect") {
-          setError("Incorrect password.")
+      if (createRes.error) {
+        const code = createRes.error.code
+        if (code === "form_password_incorrect" || code === "form_identifier_not_found") {
+          setError("Invalid email or password.")
         } else {
-          setError(passwordRes.error.longMessage || passwordRes.error.message || "Sign in failed.")
+          setError(createRes.error.longMessage || createRes.error.message || "Sign in failed.")
         }
         setLoading(false)
         return
       }
 
-      const finalizeRes = await signIn.finalize()
-      if (finalizeRes.error) {
-        setError(finalizeRes.error.longMessage || "Failed to complete sign in.")
-        setLoading(false)
+      console.log("[sign-in] status:", signIn.status)
+      console.log("[sign-in] createdSessionId:", signIn.createdSessionId)
+      console.log("[sign-in] supportedFirstFactors:", signIn.supportedFirstFactors)
+
+      if (signIn.status === "complete" && signIn.createdSessionId) {
+        console.log("[sign-in] activating session:", signIn.createdSessionId)
+        await clerk.setActive({ session: signIn.createdSessionId })
+        toast.success("Welcome back!", { description: "Signed in successfully." })
+        window.location.href = "/"
         return
       }
-      toast.success("Welcome back!", { description: "Signed in successfully." })
-      window.location.href = "/"
+
+      console.log("[sign-in] unexpected status:", signIn.status, signIn)
+      setError("Something went wrong. Please try again.")
+      setLoading(false)
     } catch (err) {
-      console.error("Sign-in error:", err)
+      console.error("[sign-in] error:", err)
       setError("Something went wrong. Please try again.")
       setLoading(false)
     }
