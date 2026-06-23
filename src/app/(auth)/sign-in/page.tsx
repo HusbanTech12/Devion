@@ -29,10 +29,14 @@ export default function SignInPage() {
 
       if (createRes.error) {
         const code = createRes.error.code
+        const message = createRes.error.longMessage || createRes.error.message || "Sign in failed."
+        console.error("[sign-in] create error:", { code, message })
         if (code === "form_password_incorrect" || code === "form_identifier_not_found") {
           setError("Invalid email or password.")
+        } else if (message.toLowerCase().includes("strategy") || message.toLowerCase().includes("not valid")) {
+          setError("No password set for this account. Use 'Forgot password?' to set one.")
         } else {
-          setError(createRes.error.longMessage || createRes.error.message || "Sign in failed.")
+          setError(message)
         }
         setLoading(false)
         return
