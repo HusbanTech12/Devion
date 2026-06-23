@@ -4,12 +4,7 @@ import { motion } from "framer-motion"
 import {
   ArrowRight,
   Globe,
-  Bot,
-  TrendingUp,
-  BarChart3,
   Smartphone,
-  Clapperboard,
-  SearchCheck,
   Check,
 } from "lucide-react"
 import Link from "next/link"
@@ -49,52 +44,6 @@ const services = [
       "App store deployment",
     ],
   },
-  {
-    icon: SearchCheck,
-    title: "SEO Services",
-    desc: "On-page and technical SEO, keyword research, content strategy, and performance analytics to improve search rankings.",
-    features: [
-      "On-page SEO",
-      "Technical SEO audits",
-      "Keyword research & strategy",
-      "Content optimization",
-      "Ranking analytics",
-    ],
-  },
-  {
-    icon: Bot,
-    title: "AI Systems Integration",
-    desc: "Intelligent AI assistants, RAG chatbot systems, and AI-powered web experiences that transform how you operate.",
-    features: [
-      "AI assistants",
-      "RAG chatbot systems",
-      "Intelligent web experiences",
-      "AI support systems",
-    ],
-  },
-  {
-    icon: BarChart3,
-    title: "Dashboard Systems",
-    desc: "Powerful admin dashboards, analytics systems, lead management, and reporting interfaces for data-driven decisions.",
-    features: [
-      "Admin dashboards",
-      "Analytics systems",
-      "Lead management",
-      "Reporting interfaces",
-    ],
-  },
-  {
-    icon: Clapperboard,
-    title: "Video Editing",
-    desc: "Professional video production, motion graphics, and post-production services for marketing, brand stories, and content.",
-    features: [
-      "Marketing videos",
-      "Motion graphics",
-      "Post-production editing",
-      "Brand storytelling",
-      "Social media content",
-    ],
-  },
 ]
 
 export default function ServicesPage() {
@@ -124,7 +73,7 @@ export default function ServicesPage() {
         {/* Services Grid */}
         <section className="py-20 md:py-28">
           <div className="container">
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-8 md:grid-cols-2 mx-auto max-w-3xl">
               {services.map((service, i) => (
                 <motion.div
                   key={service.title}

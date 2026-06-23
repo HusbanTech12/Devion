@@ -14,19 +14,19 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email",
-    value: "hello@aiagency.com",
-    href: "mailto:hello@aiagency.com",
+    value: "husbantech08@gmail.com",
+    href: "mailto:husbantech08@gmail.com",
   },
   {
     icon: Phone,
     label: "Phone",
-    value: "+1 (555) 123-4567",
-    href: "tel:+15551234567",
+    value: "+923232774340",
+    href: "tel:+923232774340",
   },
   {
     icon: MapPin,
     label: "Office",
-    value: "San Francisco, CA",
+    value: "Karachi, Pakistan",
     href: "#",
   },
 ]

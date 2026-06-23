@@ -1,13 +1,13 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import {
-  Menu, X, ChevronRight, Search, Bell, LayoutDashboard,
-  User, Settings, CreditCard, LifeBuoy, LogOut, Sparkles,
+  Menu, X, Search, Bell, LayoutDashboard,
+  User, Settings, CreditCard, LifeBuoy, LogOut, Sparkles, CalendarIcon,
 } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
@@ -25,9 +25,11 @@ import { useAuth } from "@clerk/nextjs"
 
 const baseLinks = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
+  { href: "/portfolio", label: "Portfolio" },
+  { href: "/process", label: "Process" },
   { href: "/pricing", label: "Pricing" },
+  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ]
 
@@ -55,14 +57,6 @@ export function Navbar() {
   const isDashboard = pathname.startsWith("/dashboard")
   const isAuth = pathname.startsWith("/sign-in") || pathname.startsWith("/sign-up")
 
-  const links = useMemo(
-    () =>
-      user
-        ? [...baseLinks, { href: "/dashboard", label: "Dashboard" }]
-        : baseLinks,
-    [user]
-  )
-
   if (isDashboard || isAuth) return null
 
   const initials = user?.name
@@ -77,31 +71,33 @@ export function Navbar() {
       {/* Subtle gradient glow at the bottom */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px w-3/4 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
-      <div className="relative container flex h-16 md:h-18 items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center shrink-0">
-          <Image
-            src="/images/logo-dark.svg"
-            alt="Devion"
-            width={200}
-            height={60}
-            className="h-14 md:h-[60px] w-auto"
-            priority
-            unoptimized
-          />
-        </Link>
+      <div className="relative grid grid-cols-[auto_1fr_auto] items-center w-full px-6 py-3">
+        {/* Column 1: Logo */}
+        <div className="shrink-0">
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/images/Devion Logo.svg"
+              alt="Devion"
+              width={200}
+              height={60}
+              className="h-14 md:h-[60px] w-auto"
+              priority
+              unoptimized
+            />
+          </Link>
+        </div>
 
-        {/* Desktop Navigation - centered pill */}
-        <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2">
-          <div className="flex items-center gap-0.5 rounded-full bg-muted/60 px-1.5 py-1.5 ring-1 ring-primary/5 shadow-sm">
-            {links.map((link) => {
+        {/* Column 2: Desktop Navigation */}
+        <div className="hidden md:flex justify-center items-center">
+          <nav className="flex items-center gap-0.5 rounded-full bg-muted/60 px-1.5 py-1.5 ring-1 ring-primary/5 shadow-sm">
+            {baseLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
               return (
                 <Link
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300",
+                    "relative px-4 py-2 text-sm font-medium rounded-full",
                     isActive
                       ? "text-primary"
                       : "text-muted-foreground hover:text-foreground"
@@ -114,42 +110,35 @@ export function Navbar() {
                       transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                     />
                   )}
-                  <span className="relative z-10 flex items-center gap-1.5">
-                    {link.href === "/dashboard" && <LayoutDashboard className="h-3.5 w-3.5" />}
-                    {link.label}
-                  </span>
+                  <span className="relative z-10">{link.label}</span>
                 </Link>
               )
             })}
-          </div>
-        </nav>
+          </nav>
+        </div>
 
-        {/* Desktop Right Side */}
-        <div className="hidden md:flex items-center gap-2">
+        {/* Column 3: Actions + Mobile Toggle */}
+        <div className="flex items-center gap-3 shrink-0">
           {user ? (
             <>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="shrink-0 rounded-full text-muted-foreground hover:text-foreground"
-              >
+              <Button variant="ghost" size="icon" className="shrink-0 rounded-full text-muted-foreground hover:text-foreground">
                 <Search className="h-4 w-4" />
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="shrink-0 rounded-full text-muted-foreground hover:text-foreground relative"
-              >
+              <Button variant="ghost" size="icon" className="shrink-0 rounded-full text-muted-foreground hover:text-foreground relative">
                 <Bell className="h-4 w-4" />
                 <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-primary ring-2 ring-background" />
               </Button>
 
+              <Button asChild size="sm" className="rounded-full h-9">
+                <Link href="/contact">
+                  <CalendarIcon className="h-3.5 w-3.5 mr-1.5" />
+                  Book a Call
+                </Link>
+              </Button>
+
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="relative h-9 w-9 rounded-full p-0 ring-2 ring-primary/10 hover:ring-primary/30 transition-all"
-                  >
+                  <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0 ring-2 ring-primary/10 hover:ring-primary/30 transition-all">
                     <Avatar className="h-9 w-9">
                       <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? ""} />
                       <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary text-xs font-medium">
@@ -158,11 +147,7 @@ export function Navbar() {
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className="w-64 p-1.5 rounded-2xl border-primary/10 bg-background/80 backdrop-blur-3xl shadow-2xl"
-                  align="end"
-                  sideOffset={10}
-                >
+                <DropdownMenuContent className="w-64 p-1.5 rounded-2xl border-primary/10 bg-background/80 backdrop-blur-3xl shadow-2xl" align="end" sideOffset={10}>
                   <DropdownMenuLabel className="p-0">
                     <div className="flex items-center gap-3 px-3 py-3.5">
                       <Avatar className="h-11 w-11 ring-2 ring-primary/20">
@@ -260,36 +245,27 @@ export function Navbar() {
             </>
           ) : (
             <div className="flex items-center gap-2">
-              <Button
-                asChild
-                variant="ghost"
-                size="sm"
-                className="rounded-full text-muted-foreground hover:text-foreground"
-              >
-                <Link href="/sign-in">Sign in</Link>
+              <Button asChild variant="ghost" size="sm" className="rounded-full text-muted-foreground hover:text-foreground">
+                <Link href="/sign-in">Sign In</Link>
               </Button>
-              <Button
-                asChild
-                size="sm"
-                className="rounded-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 gap-1.5"
-              >
+              <Button asChild size="sm" className="rounded-full h-9">
                 <Link href="/contact">
-                  Get Started
-                  <ChevronRight className="h-3.5 w-3.5" />
+                  <CalendarIcon className="h-3.5 w-3.5 mr-1.5" />
+                  Book a Call
                 </Link>
               </Button>
             </div>
           )}
-        </div>
 
-        {/* Mobile Menu Toggle */}
-        <button
-          className="md:hidden flex h-9 w-9 items-center justify-center rounded-full bg-muted/60 ring-1 ring-primary/5 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-        </button>
+          {/* Mobile Menu Toggle */}
+          <button
+            className="md:hidden flex h-9 w-9 items-center justify-center rounded-full bg-muted/60 ring-1 ring-primary/5 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -310,7 +286,7 @@ export function Navbar() {
               animate="visible"
               className="relative container py-6 space-y-1"
             >
-              {links.map((link) => (
+              {baseLinks.map((link) => (
                 <motion.div key={link.href} variants={itemVariants}>
                   <Link
                     href={link.href}
@@ -325,7 +301,6 @@ export function Navbar() {
                     {pathname === link.href && (
                       <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
                     )}
-                    {link.href === "/dashboard" && <LayoutDashboard className="h-4 w-4" />}
                     {link.label}
                   </Link>
                 </motion.div>
@@ -334,6 +309,14 @@ export function Navbar() {
               <motion.div variants={itemVariants} className="pt-4 border-t border-primary/5">
                 {user ? (
                   <>
+                    <div className="flex flex-col gap-2 pb-4 border-b border-primary/5">
+                      <Button size="sm" className="w-full rounded-xl" asChild>
+                        <Link href="/contact" onClick={() => setOpen(false)}>
+                          <CalendarIcon className="h-4 w-4 mr-1.5" />
+                          Book a Call
+                        </Link>
+                      </Button>
+                    </div>
                     <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-muted/30">
                       <Avatar className="h-10 w-10 ring-2 ring-primary/20">
                         <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? ""} />
@@ -393,16 +376,16 @@ export function Navbar() {
                   <div className="space-y-2">
                     <Button variant="ghost" className="w-full rounded-xl" asChild>
                       <Link href="/sign-in" onClick={() => setOpen(false)}>
-                        Sign in
+                        Sign In
                       </Link>
                     </Button>
                     <Button
-                      className="w-full rounded-xl bg-gradient-to-r from-primary to-primary/80 shadow-md shadow-primary/20"
+                      className="w-full rounded-xl"
                       asChild
                     >
                       <Link href="/contact" onClick={() => setOpen(false)}>
-                        Get Started
-                        <ChevronRight className="h-4 w-4" />
+                        <CalendarIcon className="h-4 w-4 mr-1.5" />
+                        Book a Call
                       </Link>
                     </Button>
                   </div>
