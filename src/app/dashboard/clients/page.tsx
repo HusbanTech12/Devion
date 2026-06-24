@@ -1,12 +1,11 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { Plus, Mail, ExternalLink, Pencil, Trash2 } from "lucide-react"
+import { Plus, Mail, Pencil, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 import { getClients, createClient, updateClient, deleteClient } from "@/src/actions/clients"
 import { PageHeader } from "@/src/components/shared/page-header"
-import { StatusBadge } from "@/src/components/shared/status-badge"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
@@ -40,14 +39,12 @@ export default function ClientsPage() {
   const [form, setForm] = useState(emptyForm)
   const [saving, setSaving] = useState(false)
 
-  const load = useCallback(async () => {
-    setLoading(true)
-    const res = await getClients()
-    if (res.success) setClients(res.data as Client[])
-    setLoading(false)
+  useEffect(() => {
+    getClients().then((res) => {
+      if (res.success) setClients(res.data as Client[])
+      setLoading(false)
+    })
   }, [])
-
-  useEffect(() => { load() }, [load])
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault()
@@ -57,7 +54,9 @@ export default function ClientsPage() {
       toast.success("Client Added", { description: `${form.name} has been added.` })
       setShowAdd(false)
       setForm(emptyForm)
-      load()
+      getClients().then((res) => {
+        if (res.success) setClients(res.data as Client[])
+      })
     } else {
       toast.error("Error", { description: res.error })
     }
@@ -73,7 +72,9 @@ export default function ClientsPage() {
       toast.success("Client Updated", { description: `${form.name} has been updated.` })
       setEditClient(null)
       setForm(emptyForm)
-      load()
+      getClients().then((r) => {
+        if (r.success) setClients(r.data as Client[])
+      })
     } else {
       toast.error("Error", { description: res.error })
     }
@@ -86,7 +87,9 @@ export default function ClientsPage() {
     if (res.success) {
       toast.success("Client Deleted", { description: "Client has been removed." })
       setDeleteClientId(null)
-      load()
+      getClients().then((r) => {
+        if (r.success) setClients(r.data as Client[])
+      })
     } else {
       toast.error("Error", { description: res.error })
     }
@@ -149,10 +152,10 @@ export default function ClientsPage() {
               className="group relative rounded-2xl border bg-card p-6 transition-all hover:shadow-lg hover:shadow-primary/5"
             >
               <div className="absolute right-3 top-3 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(client)}>
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(client)} aria-label="Edit client">
                   <Pencil className="h-3.5 w-3.5" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => setDeleteClientId(client.id)}>
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => setDeleteClientId(client.id)} aria-label="Delete client">
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
               </div>

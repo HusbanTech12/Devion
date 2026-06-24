@@ -121,10 +121,10 @@ export function Navbar() {
         <div className="flex items-center gap-3 shrink-0">
           {user ? (
             <>
-              <Button variant="ghost" size="icon" className="shrink-0 rounded-full text-muted-foreground hover:text-foreground">
+              <Button variant="ghost" size="icon" className="shrink-0 rounded-full text-muted-foreground hover:text-foreground" aria-label="Search">
                 <Search className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="icon" className="shrink-0 rounded-full text-muted-foreground hover:text-foreground relative">
+              <Button variant="ghost" size="icon" className="shrink-0 rounded-full text-muted-foreground hover:text-foreground relative" aria-label="Notifications">
                 <Bell className="h-4 w-4" />
                 <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-primary ring-2 ring-background" />
               </Button>
@@ -138,7 +138,7 @@ export function Navbar() {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0 ring-2 ring-primary/10 hover:ring-primary/30 transition-all">
+                  <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0 ring-2 ring-primary/10 hover:ring-primary/30 transition-all" aria-label="User menu">
                     <Avatar className="h-9 w-9">
                       <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? ""} />
                       <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary text-xs font-medium">

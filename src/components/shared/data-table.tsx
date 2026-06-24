@@ -55,6 +55,9 @@ export function DataTable<T extends { id: string }>({
                 onRowClick && "cursor-pointer hover:bg-muted/50"
               )}
               onClick={() => onRowClick?.(item)}
+              role={onRowClick ? "button" : undefined}
+              tabIndex={onRowClick ? 0 : undefined}
+              onKeyDown={onRowClick ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onRowClick(item) } } : undefined}
             >
               {columns.map((col) => (
                 <TableCell key={col.key} className={col.className}>

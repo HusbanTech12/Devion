@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-import { ExternalLink, FileText, ArrowUpRight, ArrowRight, Check } from "lucide-react"
+import { ExternalLink, FileText, ArrowRight, Check } from "lucide-react"
 import Link from "next/link"
 import { Footer } from "@/src/components/layout/footer"
 import { Badge } from "@/src/components/ui/badge"

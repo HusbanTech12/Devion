@@ -7,8 +7,6 @@ import { StatusBadge } from "@/src/components/shared/status-badge"
 import { Button } from "@/src/components/ui/button"
 import { Avatar, AvatarFallback } from "@/src/components/ui/avatar"
 import { mockTeam } from "@/src/lib/mock-data"
-import { cn } from "@/src/lib/utils"
-
 export default function TeamPage() {
   return (
     <div className="space-y-6">
@@ -55,10 +53,10 @@ export default function TeamPage() {
               <StatusBadge status={member.status === "active" ? "active" : "paused"} />
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Send email">
                 <Mail className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="More options">
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </div>

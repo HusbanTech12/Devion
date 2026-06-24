@@ -7,7 +7,6 @@ import { ActivityFeed } from "@/src/components/shared/activity-feed"
 import { StatusBadge } from "@/src/components/shared/status-badge"
 import { PageHeader } from "@/src/components/shared/page-header"
 import { mockProjects, mockActivity } from "@/src/lib/mock-data"
-import { cn } from "@/src/lib/utils"
 
 export function TeamOverview({ userName }: { userName: string | null }) {
   const assignedProjects = mockProjects.filter((p) => p.status === "active")

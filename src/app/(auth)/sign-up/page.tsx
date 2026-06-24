@@ -108,7 +108,9 @@ export default function SignUpPage() {
     return (
       <div className="space-y-6">
         <button
+          type="button"
           onClick={() => setVerifying(false)}
+          aria-label="Go back"
           className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />

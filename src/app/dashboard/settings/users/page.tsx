@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { PageHeader } from "@/src/components/shared/page-header"
@@ -58,16 +58,12 @@ export default function UsersManagementPage() {
   const [loading, setLoading] = useState(true)
   const [deleteUserId, setDeleteUserId] = useState<string | null>(null)
 
-  const fetchUsers = useCallback(async () => {
-    setLoading(true)
-    const res = await getAllUsers()
-    if (res.success) setUsers(res.data as User[])
-    setLoading(false)
-  }, [])
-
   useEffect(() => {
-    fetchUsers()
-  }, [fetchUsers])
+    getAllUsers().then((res) => {
+      if (res.success) setUsers(res.data as User[])
+      setLoading(false)
+    })
+  }, [])
 
   async function changeRole(userId: string, newRole: UserRole) {
     const res = await updateUserRole(userId, newRole)
@@ -85,7 +81,9 @@ export default function UsersManagementPage() {
     if (res.success) {
       toast.success("User Deleted", { description: "User has been removed." })
       setDeleteUserId(null)
-      fetchUsers()
+      getAllUsers().then((res) => {
+        if (res.success) setUsers(res.data as User[])
+      })
     } else {
       toast.error("Error", { description: res.error })
     }
@@ -183,6 +181,7 @@ export default function UsersManagementPage() {
                               size="icon"
                               className="h-8 w-8 text-destructive hover:text-destructive"
                               onClick={() => setDeleteUserId(user.id)}
+                              aria-label="Delete user"
                             >
                               <Trash2 className="h-3.5 w-3.5" />
                             </Button>

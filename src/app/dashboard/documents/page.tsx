@@ -4,7 +4,6 @@ import { motion } from "framer-motion"
 import { FileText, FolderOpen, Search } from "lucide-react"
 import { PageHeader } from "@/src/components/shared/page-header"
 import { Input } from "@/src/components/ui/input"
-import { Button } from "@/src/components/ui/button"
 import { useState } from "react"
 
 const documents = [
@@ -25,7 +24,8 @@ export default function DocumentsPage() {
 
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input placeholder="Search documents..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
+        <label htmlFor="search-documents" className="sr-only">Search documents</label>
+        <Input id="search-documents" placeholder="Search documents..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

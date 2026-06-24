@@ -18,7 +18,11 @@ export async function createAgent(data: FormData | unknown) {
 
   const agent = await db
     .insertInto("agents")
-    .values({ user_id: userId, ...parsed.data } as any)
+    .values({
+      user_id: userId,
+      name: parsed.data.name,
+      description: parsed.data.description ?? null,
+    })
     .returningAll()
     .executeTakeFirst()
 

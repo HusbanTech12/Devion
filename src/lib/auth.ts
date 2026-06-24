@@ -24,7 +24,7 @@ async function syncUserToDb(clerkUser: Awaited<ReturnType<typeof currentUser>>):
 
   if (existing) {
     return {
-      id: existing.id,
+      id: existing.id!,
       email: existing.email,
       name: existing.name,
       role: existing.role as UserRole,

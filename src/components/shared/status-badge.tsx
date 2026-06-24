@@ -1,6 +1,6 @@
 import { cn } from "@/src/lib/utils"
 
-type Status = "active" | "completed" | "paused" | "cancelled" | "pending" | "in_progress" | "paid" | "overdue"
+export type Status = "active" | "completed" | "paused" | "cancelled" | "pending" | "in_progress" | "paid" | "overdue"
 
 const statusConfig: Record<Status, { label: string; className: string }> = {
   active: { label: "Active", className: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" },

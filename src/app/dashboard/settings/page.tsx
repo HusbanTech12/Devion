@@ -1,17 +1,15 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { useUser } from "@clerk/nextjs"
 import { toast } from "sonner"
-import { motion } from "framer-motion"
 import { Loader2 } from "lucide-react"
 import { PageHeader } from "@/src/components/shared/page-header"
 import { AvatarUpload } from "@/src/components/shared/avatar-upload"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
-import { Separator } from "@/src/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import {
   Card,
@@ -26,15 +24,15 @@ export default function SettingsPage() {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [saving, setSaving] = useState(false)
-  const [initialized, setInitialized] = useState(false)
+  const initializedRef = useRef(false)
 
   useEffect(() => {
-    if (user && !initialized) {
+    if (user && !initializedRef.current) {
+      initializedRef.current = true
       setFirstName(user.firstName ?? "")
       setLastName(user.lastName ?? "")
-      setInitialized(true)
     }
-  }, [user, initialized])
+  }, [user])
 
   async function handleSaveProfile() {
     if (!user) return

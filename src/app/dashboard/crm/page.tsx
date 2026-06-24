@@ -1,7 +1,6 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { Search, Plus, ArrowUpRight } from "lucide-react"
+import { Search, Plus } from "lucide-react"
 import { PageHeader } from "@/src/components/shared/page-header"
 import { DataTable, type Column } from "@/src/components/shared/data-table"
 import { StatusBadge } from "@/src/components/shared/status-badge"
@@ -42,7 +41,8 @@ export default function CRMPage() {
 
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input placeholder="Search leads..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
+        <label htmlFor="search-leads" className="sr-only">Search leads</label>
+        <Input id="search-leads" placeholder="Search leads..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
       </div>
 
       <DataTable data={filtered} columns={leadColumns} />

@@ -69,7 +69,7 @@ export function MobileSidebar({
           <Link href="/dashboard" className="text-lg font-bold tracking-tight">
             Devi<span className="text-primary">on</span>
           </Link>
-          <Button variant="ghost" size="icon" onClick={onClose}>
+          <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close menu">
             <X className="h-5 w-5" />
           </Button>
         </div>

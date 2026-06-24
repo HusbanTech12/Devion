@@ -1,9 +1,15 @@
+import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { auth, currentUser } from "@clerk/nextjs/server"
 import { db } from "@/src/lib/db"
 import { ADMIN_EMAILS, TEAM_EMAILS } from "@/src/lib/constants"
 import { DashboardShell } from "@/src/components/layout/dashboard-shell"
 import type { UserRole } from "@/src/types"
+
+export const metadata: Metadata = {
+  title: "Dashboard — Devion",
+  description: "Manage your projects, clients, and team.",
+}
 
 export default async function DashboardLayout({
   children,

@@ -7,6 +7,7 @@ import { useMediaQuery } from "@/src/hooks/use-media-query"
 
 const PARTICLES = Array.from({ length: 24 }, (_, i) => {
   const n = i * 137.508
+  const seed = ((n * 7) % 100) / 100
   return {
     id: i,
     x: ((n * 7) % 100),
@@ -14,6 +15,7 @@ const PARTICLES = Array.from({ length: 24 }, (_, i) => {
     size: ((n * 3) % 25) / 10 + 0.5,
     duration: ((n * 5) % 30) / 10 + 3,
     delay: ((n * 13) % 30) / 10,
+    yRange: [0, -(seed * 20 + 10), 0] as [number, number, number],
   }
 })
 
@@ -28,7 +30,7 @@ function Particles({ reducedMotion }: { reducedMotion: boolean }) {
           className="absolute rounded-full bg-white/10"
           style={{ left: `${p.x}%`, top: `${p.y}%`, width: p.size, height: p.size }}
           animate={{
-            y: [0, -(Math.random() * 20 + 10), 0],
+            y: p.yRange,
             opacity: [0, 0.5, 0],
           }}
           transition={{
@@ -44,23 +46,28 @@ function Particles({ reducedMotion }: { reducedMotion: boolean }) {
 }
 
 export function SplashScreen() {
-  const [show, setShow] = useState(true)
+  const [show, setShow] = useState(() => {
+    if (typeof window === "undefined") return false
+    try {
+      return !localStorage.getItem("devion-splash-seen")
+    } catch {
+      return true
+    }
+  })
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)")
 
   useEffect(() => {
-    const seen = localStorage.getItem("devion-splash-seen")
-    if (seen) {
-      setShow(false)
-      return
-    }
+    if (!show) return
 
     const timer = setTimeout(() => {
-      localStorage.setItem("devion-splash-seen", "true")
+      try {
+        localStorage.setItem("devion-splash-seen", "true")
+      } catch { /* noop */ }
       setShow(false)
     }, 3000)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [show])
 
   return (
     <AnimatePresence>

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react"
 import Link from "next/link"
 import { motion, useMotionValue, useSpring, useTransform, useInView } from "framer-motion"
-import { ArrowRight, ChevronRight, Sparkles, Play } from "lucide-react"
+import { ArrowRight, Sparkles, Play } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
 import { Badge } from "@/src/components/ui/badge"
 

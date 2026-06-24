@@ -41,7 +41,7 @@ export default function AgentsPage() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
                   <Bot className="h-5 w-5 text-primary" />
                 </div>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="More options">
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </div>

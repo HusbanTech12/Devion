@@ -3,7 +3,7 @@
 import { useRef, useState, useCallback } from "react"
 import { useUser } from "@clerk/nextjs"
 import { toast } from "sonner"
-import { Camera, Loader2, Trash2, Upload } from "lucide-react"
+import { Camera, Loader2, Trash2 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { Button } from "@/src/components/ui/button"
 
@@ -30,6 +30,21 @@ export function AvatarUpload({ size = 100 }: Props) {
   const currentImage = preview ?? user?.imageUrl ?? null
   const initials = getInitials(user?.fullName, user?.primaryEmailAddress?.emailAddress)
 
+  const handleUpload = useCallback(async (file: File) => {
+    if (!user) return
+    setUploading(true)
+    try {
+      await user.setProfileImage({ file })
+      toast.success("Profile updated", { description: "Your profile image has been updated." })
+    } catch (err) {
+      console.error("Upload error:", err)
+      toast.error("Upload failed", { description: "Could not update profile image. Try again." })
+    } finally {
+      setUploading(false)
+      setPreview(null)
+    }
+  }, [user])
+
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -47,22 +62,7 @@ export function AvatarUpload({ size = 100 }: Props) {
     const objectUrl = URL.createObjectURL(file)
     setPreview(objectUrl)
     handleUpload(file)
-  }, [])
-
-  const handleUpload = useCallback(async (file: File) => {
-    if (!user) return
-    setUploading(true)
-    try {
-      await user.setProfileImage({ file })
-      toast.success("Profile updated", { description: "Your profile image has been updated." })
-    } catch (err) {
-      console.error("Upload error:", err)
-      toast.error("Upload failed", { description: "Could not update profile image. Try again." })
-    } finally {
-      setUploading(false)
-      setPreview(null)
-    }
-  }, [user])
+  }, [handleUpload])
 
   const handleRemove = useCallback(async () => {
     if (!user) return
@@ -110,6 +110,7 @@ export function AvatarUpload({ size = 100 }: Props) {
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
+          aria-label="Upload profile photo"
           className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           <Camera className="h-4 w-4" />

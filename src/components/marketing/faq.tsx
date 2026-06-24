@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ChevronDown, Plus } from "lucide-react"
+import { Plus } from "lucide-react"
 import { Badge } from "@/src/components/ui/badge"
 import { Section } from "./section"
 import { cn } from "@/src/lib/utils"
@@ -66,6 +66,8 @@ export function FAQ() {
             >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                aria-expanded={openIndex === i}
+                aria-controls={`faq-panel-${i}`}
                 className={cn(
                   "w-full text-left rounded-2xl border transition-all duration-300 p-5 cursor-pointer",
                   openIndex === i
@@ -89,6 +91,7 @@ export function FAQ() {
                 <AnimatePresence>
                   {openIndex === i && (
                     <motion.div
+                      id={`faq-panel-${i}`}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}

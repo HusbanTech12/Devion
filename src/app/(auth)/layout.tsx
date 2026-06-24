@@ -1,6 +1,12 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
 import { APP_NAME } from "@/src/lib/constants"
+
+export const metadata: Metadata = {
+  title: "Auth — Devion",
+  description: "Sign in or create an account.",
+}
 
 export default function AuthLayout({
   children,

@@ -2,13 +2,13 @@
 
 import { motion } from "framer-motion"
 import { cn } from "@/src/lib/utils"
-import { StatusBadge } from "@/src/components/shared/status-badge"
+import { StatusBadge, type Status } from "@/src/components/shared/status-badge"
 
 type KanbanItem = {
   id: string
   title: string
   description?: string
-  status: string
+  status: Status
   assignee?: string
 }
 
@@ -47,7 +47,7 @@ export function KanbanBoard({ columns, className }: Props) {
                 className="rounded-xl border bg-card p-4 shadow-sm transition-all hover:shadow-md"
               >
                 <div className="mb-2 flex items-center justify-between">
-                  <StatusBadge status={item.status as any} />
+                  <StatusBadge status={item.status} />
                   {item.assignee && (
                     <span className="text-xs text-muted-foreground">{item.assignee}</span>
                   )}

@@ -2,9 +2,8 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Search, Send } from "lucide-react"
+import { Send } from "lucide-react"
 import { PageHeader } from "@/src/components/shared/page-header"
-import { Input } from "@/src/components/ui/input"
 import { Button } from "@/src/components/ui/button"
 import { Textarea } from "@/src/components/ui/textarea"
 import { mockMessages } from "@/src/lib/mock-data"
@@ -55,7 +54,8 @@ export default function MessagesPage() {
               </div>
               <div className="border-t p-4">
                 <div className="flex gap-3">
-                  <Textarea placeholder="Type your reply..." className="min-h-[80px] flex-1" />
+                  <label htmlFor="reply-message" className="sr-only">Type your reply</label>
+                  <Textarea id="reply-message" placeholder="Type your reply..." className="min-h-[80px] flex-1" />
                   <Button className="self-end">
                     <Send className="mr-2 h-4 w-4" /> Send
                   </Button>

@@ -2,7 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server"
 import { db } from "@/src/lib/db"
-import { ADMIN_EMAILS, TEAM_EMAILS } from "@/src/lib/constants"
+
 import { revalidatePath } from "next/cache"
 import type { UserRole } from "@/src/types"
 

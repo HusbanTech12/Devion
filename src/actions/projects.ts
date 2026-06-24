@@ -18,7 +18,13 @@ export async function createProject(data: FormData | unknown) {
 
   const project = await db
     .insertInto("projects")
-    .values({ user_id: userId, ...parsed.data } as any)
+    .values({
+      user_id: userId,
+      name: parsed.data.name,
+      description: parsed.data.description ?? null,
+      client_id: parsed.data.clientId,
+      status: parsed.data.status,
+    })
     .returningAll()
     .executeTakeFirst()
 
@@ -55,7 +61,12 @@ export async function updateProject(data: FormData | unknown) {
 
   const project = await db
     .updateTable("projects")
-    .set(updates as any)
+    .set({
+      ...(updates.name !== undefined ? { name: updates.name } : {}),
+      ...(updates.description !== undefined ? { description: updates.description } : {}),
+      ...(updates.status !== undefined ? { status: updates.status } : {}),
+      ...(updates.clientId !== undefined ? { client_id: updates.clientId } : {}),
+    })
     .where("id", "=", id)
     .where("user_id", "=", userId)
     .returningAll()

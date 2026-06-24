@@ -1,11 +1,6 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { Check, ArrowRight } from "lucide-react"
 import { PageHeader } from "@/src/components/shared/page-header"
-import { Button } from "@/src/components/ui/button"
-import { cn } from "@/src/lib/utils"
-import { PLANS } from "@/src/lib/constants"
 
 export default function BillingPage() {
   return (

@@ -92,7 +92,7 @@ export function DashboardHeader({ onMenuClick, userName, userEmail, userRole }: 
   return (
     <>
       <header className="sticky top-0 z-30 flex h-16 items-center gap-2 border-b bg-background/95 px-4 lg:px-6 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <Button variant="ghost" size="icon" className="md:hidden shrink-0" onClick={onMenuClick}>
+        <Button variant="ghost" size="icon" className="md:hidden shrink-0" onClick={onMenuClick} aria-label="Toggle menu">
           <Menu className="h-5 w-5" />
         </Button>
 
@@ -139,7 +139,7 @@ export function DashboardHeader({ onMenuClick, userName, userEmail, userRole }: 
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0 ring-2 ring-primary/10 hover:ring-primary/30 transition-all">
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0 ring-2 ring-primary/10 hover:ring-primary/30 transition-all" aria-label="User menu">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={avatarSrc} alt={userName ?? ""} />
                   <AvatarFallback className="bg-primary/10 text-primary text-xs">

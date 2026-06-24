@@ -3,7 +3,7 @@ import pg from "pg"
 
 interface Database {
   users: {
-    id: string
+    id?: string
     email: string
     name: string | null
     role: "admin" | "team" | "client"
@@ -11,7 +11,7 @@ interface Database {
     updated_at?: string
   }
   agents: {
-    id: string
+    id?: string
     user_id: string
     name: string
     description: string | null
@@ -19,7 +19,7 @@ interface Database {
     updated_at?: string
   }
   clients: {
-    id: string
+    id?: string
     user_id: string
     name: string
     email: string
@@ -28,7 +28,7 @@ interface Database {
     updated_at?: string
   }
   projects: {
-    id: string
+    id?: string
     user_id: string
     client_id: string
     name: string

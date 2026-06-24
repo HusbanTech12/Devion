@@ -1,9 +1,15 @@
+import type { Metadata } from "next"
 import { auth, currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import { db } from "@/src/lib/db"
 import { AdminOverview } from "./_components/admin-overview"
 import { TeamOverview } from "./_components/team-overview"
 import { ClientOverview } from "./_components/client-overview"
+
+export const metadata: Metadata = {
+  title: "Overview — Devion Dashboard",
+  description: "Your workspace overview.",
+}
 
 export default async function DashboardPage() {
   const { userId } = await auth()

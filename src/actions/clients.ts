@@ -18,7 +18,12 @@ export async function createClient(data: FormData | unknown) {
 
   const client = await db
     .insertInto("clients")
-    .values({ user_id: userId, ...parsed.data } as any)
+    .values({
+      user_id: userId,
+      name: parsed.data.name,
+      email: parsed.data.email,
+      company: parsed.data.company ?? null,
+    })
     .returningAll()
     .executeTakeFirst()
 
@@ -55,7 +60,11 @@ export async function updateClient(data: FormData | unknown) {
 
   const client = await db
     .updateTable("clients")
-    .set(updates as any)
+    .set({
+      ...(updates.name !== undefined ? { name: updates.name } : {}),
+      ...(updates.email !== undefined ? { email: updates.email } : {}),
+      ...(updates.company !== undefined ? { company: updates.company } : {}),
+    })
     .where("id", "=", id)
     .where("user_id", "=", userId)
     .returningAll()

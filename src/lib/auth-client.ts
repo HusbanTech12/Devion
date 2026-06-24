@@ -28,7 +28,7 @@ export function useSession() {
   }
 }
 
-export function gravatarUrl(email: string, size = 200): string {
+export function gravatarUrl(email: string): string {
   const seed = encodeURIComponent(email.trim().toLowerCase())
-  return `https://api.dicebear.com/7.x/initials/svg?seed=${seed}&scale=80&backgroundColor=6366f1&radius=50`
+  return `https://api.dicebear.com/7.x/initials/svg?seed=${seed}`
 }

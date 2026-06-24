@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
 import { Plus, Search, Pencil, Trash2, ExternalLink } from "lucide-react"
 import { toast } from "sonner"
 import { getProjects, createProject, updateProject, deleteProject } from "@/src/actions/projects"
@@ -22,8 +21,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/src/components/ui/dialog"
-import { cn } from "@/src/lib/utils"
-
 type ProjectStatus = "active" | "completed" | "paused" | "cancelled"
 
 type ProjectRow = {
@@ -57,18 +54,17 @@ export default function ProjectsPage() {
   const [form, setForm] = useState(emptyForm)
   const [saving, setSaving] = useState(false)
 
-  const load = useCallback(async () => {
-    setLoading(true)
-    const [pRes, cRes] = await Promise.all([getProjects(), getClients()])
-    if (cRes.success) setClients(cRes.data)
-    if (pRes.success) {
-      const clientMap = new Map((cRes.success ? cRes.data : []).map((c: ClientRow) => [c.id, c.name]))
-      setProjects((pRes.data as ProjectRow[]).map((p) => ({ ...p, client_name: clientMap.get(p.client_id) ?? "Unknown" })))
-    }
-    setLoading(false)
-  }, [])
+  const fetchData = () =>
+    Promise.all([getProjects(), getClients()]).then(([pRes, cRes]) => {
+      if (cRes.success) setClients(cRes.data as ClientRow[])
+      if (pRes.success) {
+        const clientMap = new Map((cRes.success ? (cRes.data as ClientRow[]) : []).map((c) => [c.id, c.name]))
+        setProjects((pRes.data as ProjectRow[]).map((p) => ({ ...p, client_name: clientMap.get(p.client_id) ?? "Unknown" })))
+      }
+      setLoading(false)
+    })
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => { fetchData() }, [])
 
   const filtered = projects.filter(
     (p) =>
@@ -84,7 +80,7 @@ export default function ProjectsPage() {
       toast.success("Project Added", { description: `${form.name} has been created.` })
       setShowAdd(false)
       setForm(emptyForm)
-      load()
+      fetchData()
     } else {
       toast.error("Error", { description: res.error })
     }
@@ -100,7 +96,7 @@ export default function ProjectsPage() {
       toast.success("Project Updated", { description: `${form.name} has been updated.` })
       setEditProject(null)
       setForm(emptyForm)
-      load()
+      fetchData()
     } else {
       toast.error("Error", { description: res.error })
     }
@@ -113,7 +109,7 @@ export default function ProjectsPage() {
     if (res.success) {
       toast.success("Project Deleted", { description: "Project has been removed." })
       setDeleteProjectId(null)
-      load()
+      fetchData()
     } else {
       toast.error("Error", { description: res.error })
     }
@@ -137,10 +133,10 @@ export default function ProjectsPage() {
     {
       key: "actions", header: "", cell: (p) => (
         <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
-          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(p)}>
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(p)} aria-label="Edit project">
             <Pencil className="h-3.5 w-3.5" />
           </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => setDeleteProjectId(p.id)}>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => setDeleteProjectId(p.id)} aria-label="Delete project">
             <Trash2 className="h-3.5 w-3.5" />
           </Button>
         </div>
@@ -182,7 +178,9 @@ export default function ProjectsPage() {
       <div className="flex items-center gap-4">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <label htmlFor="search-projects" className="sr-only">Search projects</label>
           <Input
+            id="search-projects"
             placeholder="Search projects..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}

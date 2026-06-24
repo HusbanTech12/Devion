@@ -8,8 +8,7 @@ import {
 import { PageHeader } from "@/src/components/shared/page-header"
 import { MetricCard } from "@/src/components/shared/metric-card"
 import { Eye, MousePointerClick, TrendingUp, Users } from "lucide-react"
-import { revenueData, projectStatusData } from "@/src/lib/mock-data"
-import { cn } from "@/src/lib/utils"
+import { revenueData } from "@/src/lib/mock-data"
 
 const trafficData = [
   { month: "Jan", visitors: 2400, pageviews: 7200 },
