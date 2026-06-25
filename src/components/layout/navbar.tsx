@@ -71,25 +71,23 @@ export function Navbar() {
       {/* Subtle gradient glow at the bottom */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px w-3/4 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
-      <div className="relative grid grid-cols-[auto_1fr_auto] items-center w-full px-6 py-3">
-        {/* Column 1: Logo */}
-        <div className="shrink-0">
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/images/Devion Logo.svg"
-              alt="Devion"
-              width={200}
-              height={60}
-              className="h-14 md:h-[60px] w-auto"
-              priority
-              unoptimized
-            />
-          </Link>
-        </div>
+      <div className="relative flex items-center h-16 md:h-20 px-4 md:px-8">
+        {/* Logo — first visual focal point */}
+        <Link href="/" className="flex items-center shrink-0 mr-10 md:mr-16">
+          <Image
+            src="/images/logo/Devion-new1.png"
+            alt="Devion"
+            width={240}
+            height={72}
+            className="h-10 md:h-[72px] w-auto"
+            priority
+            unoptimized
+          />
+        </Link>
 
-        {/* Column 2: Desktop Navigation */}
-        <div className="hidden md:flex justify-center items-center">
-          <nav className="flex items-center gap-0.5 rounded-full bg-muted/60 px-1.5 py-1.5 ring-1 ring-primary/5 shadow-sm">
+        {/* Desktop Navigation — centered in remaining space */}
+        <div className="hidden md:flex flex-1 items-center justify-center">
+          <nav className="flex items-center gap-0.5 rounded-full bg-muted/60 px-2 py-1.5 ring-1 ring-primary/5 shadow-sm">
             {baseLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
               return (
@@ -97,7 +95,7 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "relative px-4 py-2 text-sm font-medium rounded-full",
+                    "relative px-4 py-2 text-sm font-medium rounded-full transition-colors",
                     isActive
                       ? "text-primary"
                       : "text-muted-foreground hover:text-foreground"
@@ -117,8 +115,8 @@ export function Navbar() {
           </nav>
         </div>
 
-        {/* Column 3: Actions + Mobile Toggle */}
-        <div className="flex items-center gap-3 shrink-0">
+        {/* Actions + Mobile Toggle */}
+        <div className="flex items-center gap-3 md:gap-4 shrink-0">
           {user ? (
             <>
               <Button variant="ghost" size="icon" className="shrink-0 rounded-full text-muted-foreground hover:text-foreground" aria-label="Search">
@@ -244,7 +242,7 @@ export function Navbar() {
               </DropdownMenu>
             </>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <Button asChild variant="ghost" size="sm" className="rounded-full text-muted-foreground hover:text-foreground">
                 <Link href="/sign-in">Sign In</Link>
               </Button>
