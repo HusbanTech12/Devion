@@ -25,6 +25,21 @@ const plans = [
     ],
   },
   {
+    name: "Web Applications",
+    price: "$999",
+    badge: "Popular",
+    popular: false,
+    desc: "Custom web applications with CRM, automation, and real-time collaboration features.",
+    features: [
+      "Custom Web Application",
+      "CRM & ERP Systems",
+      "Business Process Automation",
+      "Real-Time Collaboration Tools",
+      "Third-Party API Integrations",
+      "Cloud Deployment",
+    ],
+  },
+  {
     name: "Growth",
     price: "$2,299",
     badge: "Most Popular",
@@ -32,6 +47,7 @@ const plans = [
     desc: "Fullstack web + AI bundle with analytics, and priority support.",
     features: [
       "Everything in Starter Plan",
+      "Everything in Web Applications Plan",
       "AI Systems Integration",
       "Advanced Analytics & Reporting",
       "Scalable Cloud Architecture",
@@ -70,7 +86,7 @@ export default function PricingPage() {
         {/* Plans */}
         <section className="py-16 md:py-24">
           <div className="container">
-            <div className="grid gap-8 lg:grid-cols-2 mx-auto max-w-3xl items-start">
+            <div className="grid gap-8 lg:grid-cols-3 mx-auto max-w-5xl items-start">
               {plans.map((plan, i) => (
                 <motion.div
                   key={plan.name}

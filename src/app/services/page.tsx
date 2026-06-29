@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import {
   ArrowRight,
   Globe,
+  Code2,
   Check,
 } from "lucide-react"
 import Link from "next/link"
@@ -29,6 +30,18 @@ const services = [
       "Admin dashboards & analytics",
       "Scalable cloud architectures",
       "Modern UI/UX systems",
+    ],
+  },
+  {
+    icon: Code2,
+    title: "Web Application Development",
+    desc: "Custom web applications, CRM systems, inventory management, and business process automation tools.",
+    features: [
+      "Custom CRM & ERP systems",
+      "Inventory management",
+      "Business process automation",
+      "Real-time collaboration tools",
+      "Third-party API integrations",
     ],
   },
 ]
@@ -60,7 +73,7 @@ export default function ServicesPage() {
         {/* Services Grid */}
         <section className="py-20 md:py-28">
           <div className="container">
-            <div className="grid gap-8 mx-auto max-w-xl">
+            <div className="grid gap-8 md:grid-cols-2 mx-auto max-w-3xl">
               {services.map((service, i) => (
                 <motion.div
                   key={service.title}

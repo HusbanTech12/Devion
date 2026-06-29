@@ -3,14 +3,14 @@
 import { useRef, useState } from "react"
 import Link from "next/link"
 import { motion, useInView } from "framer-motion"
-import { ChevronRight, Globe } from "lucide-react"
+import { ChevronRight, Globe, Code2 } from "lucide-react"
 import { Card, CardContent } from "@/src/components/ui/card"
 import { Badge } from "@/src/components/ui/badge"
 import { Button } from "@/src/components/ui/button"
 import { Section } from "./section"
 import { SERVICES } from "@/src/lib/constants"
 
-const icons = [Globe]
+const icons = [Globe, Code2]
 
 function FeatureCard({ feature, icon: Icon, i }: { feature: typeof SERVICES[number]; icon: React.ElementType; i: number }) {
   const ref = useRef(null)
@@ -88,7 +88,7 @@ export function Features() {
             From web applications to AI systems — we design, build, and deploy solutions that drive real business results.
           </p>
         </motion.div>
-        <div className="mt-12 grid gap-8 mx-auto max-w-xl">
+        <div className="mt-12 grid gap-8 md:grid-cols-2 mx-auto max-w-3xl">
           {SERVICES.map((feature, i) => (
             <FeatureCard key={feature.title} feature={feature} icon={icons[i]} i={i} />
           ))}

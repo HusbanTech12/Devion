@@ -55,12 +55,27 @@ export const PLANS = [
     ],
   },
   {
+    name: "Web Applications",
+    price: "$999",
+    description: "Custom web applications with CRM, automation, and real-time collaboration features.",
+    popular: false,
+    features: [
+      "Custom Web Application",
+      "CRM & ERP Systems",
+      "Business Process Automation",
+      "Real-Time Collaboration Tools",
+      "Third-Party API Integrations",
+      "Cloud Deployment",
+    ],
+  },
+  {
     name: "Growth",
     price: "$2,299",
     description: "Fullstack web + AI bundle with analytics, and priority support.",
     popular: true,
     features: [
       "Everything in Starter Plan",
+      "Everything in Web Applications Plan",
       "AI Systems Integration",
       "Advanced Analytics & Reporting",
       "Scalable Cloud Architecture",
@@ -74,5 +89,10 @@ export const SERVICES = [
     title: "SaaS Product Development",
     description: "Custom SaaS platforms, business applications, and scalable cloud solutions with modern UI/UX and powerful backend systems.",
     features: ["Custom SaaS platforms", "Business applications", "Admin dashboards & analytics", "Scalable cloud architectures", "Modern UI/UX systems"],
+  },
+  {
+    title: "Web Application Development",
+    description: "Custom web applications, CRM systems, inventory management, and business process automation tools.",
+    features: ["Custom CRM & ERP systems", "Inventory management", "Business process automation", "Real-time collaboration tools", "Third-party API integrations"],
   },
 ] as const
