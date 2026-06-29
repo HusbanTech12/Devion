@@ -21,14 +21,14 @@ const fadeIn = {
 const services = [
   {
     icon: Globe,
-    title: "Fullstack Web Development",
-    desc: "Business websites, SaaS platforms, dashboards, and admin systems with scalable architectures and responsive UI.",
+    title: "SaaS Product Development",
+    desc: "Custom SaaS platforms, business applications, and scalable cloud solutions with modern UI/UX and powerful backend systems.",
     features: [
-      "Business websites",
-      "SaaS platforms",
-      "Dashboards & admin systems",
-      "Scalable architectures",
-      "Responsive UI systems",
+      "Custom SaaS platforms",
+      "Business applications",
+      "Admin dashboards & analytics",
+      "Scalable cloud architectures",
+      "Modern UI/UX systems",
     ],
   },
 ]

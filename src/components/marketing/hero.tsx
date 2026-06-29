@@ -91,10 +91,10 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-balance text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
           >
-            <span className="text-white">AI-Powered Software</span>
+            <span className="text-white">Transform Your Business</span>
             <br />
             <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
-              Solutions That Drive Growth
+              with Custom SaaS Solutions
             </span>
           </motion.h1>
 
@@ -104,7 +104,7 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mx-auto mt-6 max-w-2xl text-lg text-white/80 md:text-xl"
           >
-            We build scalable web applications, AI solutions, and digital experiences that help businesses grow faster — from concept to deployment in weeks.
+            We build powerful SaaS platforms that automate operations, improve efficiency, and accelerate business growth.
           </motion.p>
 
           <motion.div

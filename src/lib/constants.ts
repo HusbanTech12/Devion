@@ -71,8 +71,8 @@ export const PLANS = [
 
 export const SERVICES = [
   {
-    title: "Fullstack Web Development",
-    description: "Business websites, SaaS platforms, dashboards, admin systems, scalable architectures, responsive UI systems.",
-    features: ["Business websites", "SaaS platforms", "Dashboards & admin systems", "Scalable architectures", "Responsive UI systems"],
+    title: "SaaS Product Development",
+    description: "Custom SaaS platforms, business applications, and scalable cloud solutions with modern UI/UX and powerful backend systems.",
+    features: ["Custom SaaS platforms", "Business applications", "Admin dashboards & analytics", "Scalable cloud architectures", "Modern UI/UX systems"],
   },
 ] as const
