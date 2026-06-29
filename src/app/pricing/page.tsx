@@ -25,29 +25,13 @@ const plans = [
     ],
   },
   {
-    name: "App Development",
-    price: "$1,299",
-    badge: "Most Popular",
-    popular: true,
-    desc: "Native or cross-platform mobile app with backend integration and full deployment.",
-    features: [
-      "iOS & Android App Development",
-      "Cross-Platform or Native Build",
-      "Backend API Integration",
-      "Offline & Real-Time Sync",
-      "User Authentication System",
-      "App Store Deployment",
-    ],
-  },
-  {
     name: "Growth",
     price: "$2,299",
-    badge: "Best Value",
-    desc: "Fullstack web + mobile app bundle with AI, analytics, and priority support.",
-    popular: false,
+    badge: "Most Popular",
+    popular: true,
+    desc: "Fullstack web + AI bundle with analytics, and priority support.",
     features: [
       "Everything in Starter Plan",
-      "Everything in App Development Plan",
       "AI Systems Integration",
       "Advanced Analytics & Reporting",
       "Scalable Cloud Architecture",
@@ -86,7 +70,7 @@ export default function PricingPage() {
         {/* Plans */}
         <section className="py-16 md:py-24">
           <div className="container">
-            <div className="grid gap-8 lg:grid-cols-3 mx-auto max-w-5xl items-start">
+            <div className="grid gap-8 lg:grid-cols-2 mx-auto max-w-3xl items-start">
               {plans.map((plan, i) => (
                 <motion.div
                   key={plan.name}

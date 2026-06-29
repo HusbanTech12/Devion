@@ -55,27 +55,12 @@ export const PLANS = [
     ],
   },
   {
-    name: "App Development",
-    price: "$1,299",
-    description: "Native or cross-platform mobile app with backend integration and full deployment.",
-    popular: false,
-    features: [
-      "iOS & Android App Development",
-      "Cross-Platform or Native Build",
-      "Backend API Integration",
-      "Offline & Real-Time Sync",
-      "User Authentication System",
-      "App Store Deployment",
-    ],
-  },
-  {
     name: "Growth",
     price: "$2,299",
-    description: "Fullstack web + mobile app bundle with AI, analytics, and priority support.",
+    description: "Fullstack web + AI bundle with analytics, and priority support.",
     popular: true,
     features: [
       "Everything in Starter Plan",
-      "Everything in App Development Plan",
       "AI Systems Integration",
       "Advanced Analytics & Reporting",
       "Scalable Cloud Architecture",
@@ -89,10 +74,5 @@ export const SERVICES = [
     title: "Fullstack Web Development",
     description: "Business websites, SaaS platforms, dashboards, admin systems, scalable architectures, responsive UI systems.",
     features: ["Business websites", "SaaS platforms", "Dashboards & admin systems", "Scalable architectures", "Responsive UI systems"],
-  },
-  {
-    title: "App Development",
-    description: "iOS & Android apps, cross-platform development, backend integration, offline & real-time sync.",
-    features: ["iOS & Android apps", "Cross-platform development", "Backend integration", "Offline & real-time sync", "App store deployment"],
   },
 ] as const

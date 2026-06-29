@@ -24,7 +24,7 @@ export function Pricing() {
           </p>
         </motion.div>
 
-        <div className="mt-12 mx-auto max-w-5xl grid gap-8 md:grid-cols-3">
+        <div className="mt-12 mx-auto max-w-3xl grid gap-8 md:grid-cols-2">
           {PLANS.map((plan, i) => (
             <motion.div
               key={plan.name}
